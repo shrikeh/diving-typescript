@@ -1,0 +1,32 @@
+{
+  "include": [
+    "./src"
+  ],
+  "exclude": [
+    "node_modules"
+  ],
+  "compilerOptions": {
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "outDir": "dist/js",
+    "target": "esnext",
+    "module": "commonjs",
+    "strict": true,
+    "rootDir": ".",
+    "baseUrl": "./src",
+    "paths": {
+      "~diving/*": ["diving/*"],
+      "~/components/*": ["components/*"]
+    },
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "jsx": "preserve"
+  }
+}
