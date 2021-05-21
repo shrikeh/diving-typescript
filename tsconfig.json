@@ -11,7 +11,7 @@
       "dom.iterable",
       "esnext"
     ],
-    "outDir": "dist/js",
+    "outDir": "./dist/js",
     "target": "esnext",
     "module": "esnext",
     "strict": true,

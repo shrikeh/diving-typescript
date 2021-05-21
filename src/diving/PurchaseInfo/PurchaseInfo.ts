@@ -1,7 +1,7 @@
 import { Price } from '~diving/Price';
-import PurchaseDateInFuture from './PurchaseDateInFuture';
+import { PurchaseDateInFuture } from './PurchaseDateInFuture';
 
-export default class PurchaseInfo {
+export class PurchaseInfo {
   readonly price: Price;
 
   readonly purchaseDate: Date;
@@ -34,3 +34,5 @@ export default class PurchaseInfo {
     }
   }
 }
+
+export default PurchaseInfo;

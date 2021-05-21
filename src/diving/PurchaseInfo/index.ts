@@ -1,5 +1,5 @@
-import PurchaseInfo from './PurchaseInfo';
-import PurchaseDateInFuture from './PurchaseDateInFuture';
+import { PurchaseInfo } from './PurchaseInfo';
+import { PurchaseDateInFuture } from './PurchaseDateInFuture';
 
 export {
   PurchaseInfo,

@@ -13,19 +13,19 @@ describe('KitItem tests', () => {
     new Date(-1),
     new URL('https://www.othree.co.uk/drysuit-range/ri-2-100-flex-drysuit/'),
   );
-  test('it returns the name', () => {
+  test('it returns the name', async () => {
     const kitItem = new KitItem(name, manufacturer, purchaseInfo);
 
     expect(kitItem.getName()).toBe(name);
   });
 
-  test('it returns the purchase info', () => {
+  test('it returns the purchase info', async () => {
     const kitItem = new KitItem(name, manufacturer, purchaseInfo);
 
     expect(kitItem.getPurchaseInfo()).toBe(purchaseInfo);
   });
 
-  test('it returns the manufacturer', () => {
+  test('it returns the manufacturer', async () => {
     const kitItem = new KitItem(name, manufacturer, purchaseInfo);
 
     expect(kitItem.getManufacturer()).toBe(manufacturer);

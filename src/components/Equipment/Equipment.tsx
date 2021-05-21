@@ -5,5 +5,5 @@ import React, { ReactElement } from 'react';
 // import Typography from '@material-ui/core/Typography';
 
 export default function Equipment(): ReactElement {
-  return <div>Hello</div>;
+  return <div test-id="ohai">Hello</div>;
 }

@@ -1,4 +1,4 @@
-export default class Manufacturer {
+export class Manufacturer {
   static create(name: string, uri: string | URL): Manufacturer {
     return new Manufacturer(
       name,
@@ -20,3 +20,5 @@ export default class Manufacturer {
     return this.url;
   }
 }
+
+export default Manufacturer;

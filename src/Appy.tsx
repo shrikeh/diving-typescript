@@ -1,8 +1,8 @@
 import React from 'react';
-// import logo from './logo.svg';
+
 import './App.css';
 
-function App() {
+function Appy(): JSX.Element {
   return (
     <div className="App">
       <header className="App-header">
@@ -10,7 +10,7 @@ function App() {
         <p>
           Edit
           {' '}
-          <code>src/App.tsx</code>
+          <code>src/Appy.tsx</code>
           {' '}
           and save to reload.
         </p>
@@ -27,4 +27,4 @@ function App() {
   );
 }
 
-export default App;
+export default Appy;

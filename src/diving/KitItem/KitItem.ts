@@ -1,7 +1,7 @@
 import { Manufacturer } from '~diving/Manufacturer';
 import { PurchaseInfo } from '~diving/PurchaseInfo';
 
-export default class KitItem {
+export class KitItem {
   constructor(
     readonly name: string,
     readonly manufacturer: Manufacturer,
@@ -24,3 +24,5 @@ export default class KitItem {
     return this.purchaseInfo;
   }
 }
+
+export default KitItem;

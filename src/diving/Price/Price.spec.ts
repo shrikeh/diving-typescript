@@ -4,7 +4,7 @@ import { sprintf } from 'sprintf-js';
 import { AmountNotPositive, CurrencyIsoCode, Price } from '~diving/Price';
 
 describe('Price tests', () => {
-  test('It throws an error if the amount is not positive', () => {
+  test('It throws an error if the amount is not positive', async () => {
     const amount = new Decimal(-1.01);
 
     expect(() => {
@@ -12,7 +12,7 @@ describe('Price tests', () => {
     }).toThrow(AmountNotPositive.create(amount));
   });
 
-  test('It returns a currency string', () => {
+  test('It returns a currency string', async () => {
     const amount = 123.45;
     const price = Price.create(amount, 'EUR');
 

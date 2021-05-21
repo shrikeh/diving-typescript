@@ -1,4 +1,4 @@
-import Manufacturer from './Manufacturer';
+import { Manufacturer } from './Manufacturer';
 
 export { Manufacturer };
 

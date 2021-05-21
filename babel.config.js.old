@@ -13,8 +13,8 @@ const presets = [
       "node": "current"
     }
   }],
-  ["@babel/preset-react"],
   ["@babel/preset-typescript"],
+  ["@babel/preset-react"],
   ["es2015"]
 ];
 

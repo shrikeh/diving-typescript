@@ -3,6 +3,13 @@ const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 const distDir = path.resolve(__dirname, 'dist');
 
+const babelOptions = {
+  "presets": [
+    "@babel/preset-env",
+    "@babel/preset-react",
+  ]
+};
+
 module.exports = {
   mode: 'development',
   entry: './src/index.tsx',
@@ -11,24 +18,36 @@ module.exports = {
     contentBase: distDir
   },
   module: {
-    rules: [
-      {
-        test: /\.tsx?$/,
-        use: 'ts-loader',
-        exclude: /node_modules/,
-      },
-      {
-        test: /\.css$/i,
-        use: ["style-loader", "css-loader"],
-      },
-    ],
-  },
+    rules: [{
+      test: /\.tsx?$/,
+      exclude: /node_modules/,
+      use: [
+        {
+          loader: 'ts-loader'
+        },
+      ]
+    }, {
+      test: /\.jsx?$/,
+      exclude: /node_modules/,
+      use: [
+        {
+          loader: 'babel-loader',
+          options: babelOptions
+        }
+      ]
+    },
+    {
+      test: /\.css$/i,
+      use: ["style-loader", "css-loader"],
+    },
+  ]},
   resolve: {
     plugins: [new TsconfigPathsPlugin()],
     extensions: ['.tsx', '.ts', '.js'],
   },
   output: {
     filename: 'main.js',
-    path: distDir
+    path: distDir,
+    publicPath: "/"
   }
 };
