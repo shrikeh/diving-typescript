@@ -1,5 +1,9 @@
 /build
 /node_modules
 /yarn-error.log
+
+
+### IDE settings
 /.idea
 /*.iml
+.DS_Store

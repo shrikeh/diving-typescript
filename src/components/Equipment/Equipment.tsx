@@ -4,8 +4,6 @@ import React, { ReactElement } from 'react';
 // import SvgIcon, { SvgIconProps } from '@material-ui/core/SvgIcon';
 // import Typography from '@material-ui/core/Typography';
 
-const Equipment = (): ReactElement => (
-  <div />
-);
-
-export default Equipment;
+export default function Equipment(): ReactElement {
+  return <div>Hello</div>;
+}
