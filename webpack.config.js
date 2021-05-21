@@ -26,15 +26,6 @@ module.exports = {
           loader: 'ts-loader'
         },
       ]
-    }, {
-      test: /\.jsx?$/,
-      exclude: /node_modules/,
-      use: [
-        {
-          loader: 'babel-loader',
-          options: babelOptions
-        }
-      ]
     },
     {
       test: /\.css$/i,
