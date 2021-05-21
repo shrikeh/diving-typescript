@@ -14,10 +14,12 @@ const presets = [
     }
   }],
   ["@babel/preset-react"],
-  ["@babel/preset-typescript"]
+  ["@babel/preset-typescript"],
+  ["es2015"]
 ];
 
 const plugins = [
+  "transform-es2015-modules-commonjs",
   [
     'module-resolver',
     {

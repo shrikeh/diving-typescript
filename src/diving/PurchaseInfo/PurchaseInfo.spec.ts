@@ -1,6 +1,6 @@
 import { describe, test, expect } from '@jest/globals';
 import { PurchaseInfo, PurchaseDateInFuture } from '~diving/PurchaseInfo';
-import { Price } from '~diving/Price/Price';
+import { Price } from '~diving/Price';
 
 describe('PurchaseInfo tests', () => {
   const today = new Date();

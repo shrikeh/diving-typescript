@@ -1,6 +1,6 @@
-import { KitItem } from './KitItem';
-import { Manufacturer } from './Manufacturer';
-import { PurchaseInfo } from './PurchaseInfo';
+import KitItem from './KitItem';
+import Manufacturer from './Manufacturer';
+import PurchaseInfo from './PurchaseInfo';
 
 export {
   KitItem,

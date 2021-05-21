@@ -1,4 +1,4 @@
-import { KitItem } from './KitItem';
+import KitItem from './KitItem';
 
 export { KitItem };
 
