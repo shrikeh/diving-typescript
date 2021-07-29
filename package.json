@@ -1,13 +1,17 @@
 {
   "dependencies": {
     "@material-ui/core": "^4.11.4",
+    "@types/halfred": "^2.0.1",
     "@types/react": "^17.0.6",
     "@types/react-dom": "^17.0.5",
     "@types/sprintf": "^0.1.0",
     "@types/sprintf-js": "^1.1.2",
+    "@typescript-eslint/eslint-plugin": "^4.24.0",
+    "axios": "^0.21.1",
     "babel-loader": "^8.2.2",
     "decimal.js": "^10.2.1",
     "dotenv": "^9.0.2",
+    "halfred": "^2.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "sprintf-js": "^1.1.2",
@@ -15,7 +19,6 @@
     "typescript": "^4.2.4"
   },
   "devDependencies": {
-    "@babel/core": "^7.14.3",
     "@babel/eslint-parser": "^7.14.3",
     "@babel/plugin-transform-runtime": "^7.14.3",
     "@babel/preset-env": "^7.14.2",

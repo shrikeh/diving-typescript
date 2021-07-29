@@ -12,7 +12,7 @@ const babelOptions = {
 
 module.exports = {
   mode: 'development',
-  entry: './src/index.tsx',
+  entry: './src/Diving.tsx',
   devtool: 'inline-source-map',
   devServer: {
     contentBase: distDir

@@ -33,8 +33,9 @@
     "noEmit": false,
     "sourceMap": true,
     "paths": {
+      "~app/*": ["app/*"],
       "~diving/*": ["diving/*"],
-      "~/components/*": ["components/*"]
+      "~components/*": ["components/*"]
     }
   }
 }

@@ -15,9 +15,20 @@ const plugins =  [
   [
     "@babel/plugin-transform-runtime",
     {
-      regenerator: true
+      root: [rootPath],
+      extensions: [
+        '.ios.ts',
+        '.android.ts',
+        '.ts',
+        '.ios.tsx',
+        '.android.tsx',
+        '.tsx',
+        '.jsx',
+        '.js',
+        '.json',
+      ]
     }
-  ]
+  ],
 ];
 
 const babelConfig = {

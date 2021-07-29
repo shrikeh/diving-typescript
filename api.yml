@@ -1,0 +1,366 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/shrikeh/Diving/1.0.0
+info:
+  description: Diving website API
+  version: "1.0.0"
+  title: Diving website API
+  contact:
+    email: barney@shrikeh.net
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: admins
+    description: Secured Admin-only calls
+  - name: developers
+    description: Operations available to regular developers
+paths:
+  /kit:
+    get:
+      operationId: listKit
+      responses:
+        '200':
+          description: List all kit
+          headers:
+            'Age':
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/HeaderAge'
+              example: 24
+            'Cache-Control':
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/HeaderCacheControl'
+              example: 'public, max-age=604800, immutable'
+            'Etag':
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/HeaderEtag'
+                example: '169-ZvbJQlMiJ0Z/SvJhPuvYWPLgCiU'
+            'Expires':
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/HeaderExpires'
+              example: 'Wed, 21 Oct 2022 07:28:00 GMT'
+            'Link':
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/HeaderCanonicalLink'
+              example: '<https://virtserver.swaggerhub.com/shrikeh/Diving2/1.0.0/kit>; rel="canonical"'
+            'Last-Modified':
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/HeaderLastModified'
+              example: 'Wed, 21 July 2021 07:28:00 GMT'
+            'Content-Security-Policy':
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/HeaderContentSecurityPolicy'
+                example: "default-src 'self'; report-uri https://report.shrikeh.net/csp"
+            'Cross-Origin-Resource-Policy':
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/HeaderCorsPolicy'
+              example: 'same-origin'
+            'Strict-Transport-Security':
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/HeaderStrictTransportSecurity'
+              example: 'max-age=63072000; includeSubDomains; preload'
+          content:
+            application/hal+json:
+              schema:
+                type: object
+                properties:
+                  _links:
+                    type: object
+                    format: hal
+                    properties:
+                      'self':
+                        allOf:
+                          - $ref: '#/components/schemas/HalLink'
+                        example:
+                          href: '/kit'
+                      curies:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/HalCuries'
+                      'kit:items':
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/HalKitItem'
+                        example:
+                          - 'self':
+                              'title': 'O`Three Ri 2-100'
+                              'href': '/item/ri-2-100-drysuit'
+                            'kit:img':
+                              'href': '/img/ri-2-100-drysuit'
+                            'kit:thumb':
+                              'href': '/img/ri-2-100-drysuit-small'
+                          - 'self':
+                              'title': 'Scubapro Gorilla Fins'
+                              'href': '/item/scubapro-gorilla-fins'
+                            'kit:img':
+                              'href': 'https://assets.shrikeh.net/img/scubapro-gorilla-fins.png'
+                            'kit:thumb':
+                              'href': 'https://assets.shrikeh.net/img/scubapro-gorilla-fins-small.png'
+  /kit/{slug}:
+    get:
+      operationId: itemDetails
+      parameters:
+        - $ref: '#/components/parameters/itemSlug'
+      responses:
+        '200':
+          description: A Kit Item
+          headers:
+            'Age':
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/HeaderAge'
+              example: 24
+            'Cache-Control':
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/HeaderCacheControl'
+              example: 'public, max-age=604800, immutable'
+            'Etag':
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/HeaderEtag'
+                example: '169-ZvbJQlMiJ0Z/SvJhPuvYWPLgCiU'
+            'Expires':
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/HeaderExpires'
+              example: 'Wed, 21 Oct 2022 07:28:00 GMT'
+            'Link':
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/HeaderCanonicalLink'
+              example: '<https://virtserver.swaggerhub.com/shrikeh/Diving2/1.0.0/kit/some-item-slug>; rel="canonical"'
+            'Last-Modified':
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/HeaderLastModified'
+              example: 'Wed, 21 July 2021 07:28:00 GMT'
+            'Content-Security-Policy':
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/HeaderContentSecurityPolicy'
+                example: "default-src 'self'; report-uri https://report.shrikeh.net/csp"
+            'Cross-Origin-Resource-Policy':
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/HeaderCorsPolicy'
+              example: 'same-origin'
+            'Strict-Transport-Security':
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/HeaderStrictTransportSecurity'
+              example: 'max-age=63072000; includeSubDomains; preload'
+          content:
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/KitItem'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+components:
+  parameters:
+    itemSlug:
+      name: slug
+      in: path
+      required: true
+      schema:
+        allOf:
+          - $ref: '#/components/schemas/Slug'
+  responses:
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    HeaderAge:
+      type: integer
+      format: int32
+      example: 24
+    HeaderCorsPolicy:
+      type: string
+      enum:
+        - same-site
+        - same-origin
+      example: 'same-origin'
+    HeaderCacheControl:
+      type: string
+      example: 'public, max-age=604800, immutable'
+    HeaderEtag:
+      type: string
+      example: '14c-DvKfCLhQEf6zyDzu6Pu8e7P0tlk'
+    HeaderExpires:
+      type: string
+      example: 'Wed, 21 Oct 2022 07:28:00 GMT'
+    HeaderLastModified:
+      type: string
+      example: 'Wed, 21 July 2021 07:28:00 GMT'
+    HeaderCanonicalLink:
+      description: A canonical link to the resource (where a resource may be accessed by multiple URIs).
+      type: string
+      example: <https://virtserver.swaggerhub.com/shrikeh/Diving2/1.0.0/kit/some-item-slug>; rel="canonical"
+    HeaderContentSecurityPolicy:
+      type: string
+      example: "default-src 'self'; report-uri https://report.shrikeh.net/csp"
+    HeaderStrictTransportSecurity:
+      type: string
+      description: Used to enforce Strict Transport Security ()
+      example: 'max-age=63072000; includeSubDomains; preload'
+    Slug:
+      description: A URL-friendly unique identifier for the item
+      type: string
+      minLength: 3
+      maxLength: 128
+      pattern: '^[a-z0-9-]{3,128}$'
+      example: 'this-is-a-product-slug'
+    Money:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: float
+        currency:
+          type: string
+      example:
+        amount: 100.00
+        currency: 'GBP'
+    KitItem:
+      type: object
+      required:
+        - _links
+        - id
+        - name
+        - purchased
+      properties:
+        _links:
+          $ref: '#/components/schemas/HalKitItem'
+        id:
+          type: string
+          format: uuid
+          example: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
+        name:
+          type: string
+          example: 'Ri 2-100 Drysuit'
+        purchased:
+          type: string
+          format: date
+          example: '2016-08-29'
+        price:
+          $ref: '#/components/schemas/Money'
+        _embedded:
+          type: object
+          format: hal
+          properties:
+            'kit:manufacturer':
+              $ref: '#/components/schemas/Manufacturer'
+    HalKitItem:
+      type: object
+      format: hal
+      properties:
+        'self':
+          $ref: '#/components/schemas/HalLink'
+        'kit:img':
+          $ref: '#/components/schemas/HalLink'
+        'kit:thumb':
+          $ref: '#/components/schemas/HalLink'
+      required:
+        - 'self'
+        - 'kit:img'
+        - 'kit:thumb'
+      example:
+        'self':
+          'title': 'O`Three Ri 2-100'
+          'href': '/item/ri-2-100-drysuit'
+        'kit:img':
+          'href': 'https://assets.shrikeh.net/img/ri-2-100-drysuit'
+        'kit:thumb':
+          'href': 'https://assets.shrikeh.net/img/ri-2-100-drysuit-small'
+    HalCuries:
+      type: object
+      properties:
+        name:
+          type: string
+          example: 'kit'
+        href:
+          type: string
+          format: hal-uri-template
+          example: 'https://haltalk.herokuapp.com/docs/{rel}'
+        templated:
+          type: boolean
+          example: true
+    HalLink:
+      type: object
+      properties:
+        href:
+          type: string
+          format: hal-uri
+          example: '/item/some-item'
+        title:
+          type: string
+          example: 'Some title'
+        templated:
+          type: boolean
+          example: false
+      required:
+        - href
+      example:
+        href: '/item/some-item'
+        title: 'Some item'
+    Manufacturer:
+      required:
+        - _links
+        - name
+      properties:
+        _links:
+          type: object
+          format: hal
+          properties:
+            'self':
+              $ref: '#/components/schemas/HalLink'
+            'logo:img':
+              $ref: '#/components/schemas/HalLink'
+          example:
+            'self':
+              'href': '/manufacturer/o-three'
+              'title': "O`Three"
+            'logo:img':
+              'href': 'https://assets.shrikeh.net/img/o-three.png'
+              'title': "O`Three logo"
+        name:
+          type: string
+          example: ACME Corporation
+        homePage:
+          type: string
+          format: uri
+          example: 'https://www.acme-corp.com'
+        phone:
+          $ref: '#/components/schemas/PhoneNumber'
+      type: object
+      # Schema for error response body
+    PhoneNumber:
+      type: string
+      format: phone
+      pattern: '^\+((?:9[679]|8[035789]|6[789]|5[90]|42|3[578]|2[1-689])|9[0-58]|8[1246]|6[0-6]|5[1-8]|4[013-9]|3[0-469]|2[70]|7|1)(?:\W*\d){0,13}\d$'
+      example: '+44 1234 555 666'
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+      required:
+        - code
+        - message
