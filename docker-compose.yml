@@ -8,14 +8,26 @@ services:
     ports:
       - 443:443
     networks:
-      - prism
+      - prism-mock
+      - prism-proxy
     depends_on:
-      - prism
+      - prism-mock
+      - prism-proxy
     volumes:
       - "${PWD}/tools/docker/api/default.conf:/etc/nginx/conf.d/default.conf:ro"
       - "${PWD}/tools/tls:/etc/tls:ro"
-  prism:
-    container_name: prism.shrikeh.local
+  prism-mock:
+    container_name: prism-mock.shrikeh.local
+    command: "mock -h 0.0.0.0 /tmp/${API_FILE}"
+    image: stoplight/prism:4
+    volumes:
+      - "${PWD}/api.yml:/tmp/${API_FILE}:ro"
+    expose:
+      - 4010
+    networks:
+      - prism-mock
+  prism-proxy:
+    container_name: prism-proxy.shrikeh.local
     command: "proxy -h 0.0.0.0 /tmp/${API_FILE} ${API_ENDPOINT}"
     image: stoplight/prism:4
     volumes:
@@ -23,7 +35,8 @@ services:
     expose:
       - 4010
     networks:
-      - prism
+      - prism-proxy
 
 networks:
-  prism:
+  prism-mock:
+  prism-proxy:

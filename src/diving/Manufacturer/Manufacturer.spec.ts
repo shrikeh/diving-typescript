@@ -10,8 +10,8 @@ describe('Manufacturer tests', () => {
     expect(manufacturer.getName()).toBe(name);
   });
 
-  test('It returns the URL', async () => {
+  test('It returns the homepage', async () => {
     const manufacturer = Manufacturer.create(name, url);
-    expect(manufacturer.getUrl().toString()).toBe(url);
+    expect(manufacturer.getHomepage().toString()).toBe(url);
   });
 });

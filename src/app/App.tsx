@@ -1,8 +1,8 @@
 import React from 'react';
-
 import './App.css';
+import { Equipment } from '~components/Equipment';
 
-function Appy(): JSX.Element {
+export function App(): JSX.Element {
   return (
     <div className="App">
       <header className="App-header">
@@ -10,10 +10,11 @@ function Appy(): JSX.Element {
         <p>
           Edit
           {' '}
-          <code>src/Appy.tsx</code>
+          <code>src/App.tsx</code>
           {' '}
           and save to reload.
         </p>
+        <Equipment />
         <a
           className="App-link"
           href="https://reactjs.org"
@@ -27,4 +28,4 @@ function Appy(): JSX.Element {
   );
 }
 
-export default Appy;
+export default App;

@@ -1,14 +1,14 @@
 import { describe, test, expect } from '@jest/globals';
 import { shallow } from 'enzyme';
 import React from 'react';
-import Appy from './Appy';
+import App from './App';
 
-describe('<Appy />', () => {
+describe('<App />', () => {
   test(
     'should display a blank login form, with remember me checked by default',
     async () => {
-      const app = shallow(<Appy />);
-      expect(app.text()).toContain('src/Appy.tsx');
+      const app = shallow(<App />);
+      expect(app.text()).toContain('src/App.tsx');
     },
   );
 });

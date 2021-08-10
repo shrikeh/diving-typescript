@@ -1,19 +1,42 @@
-const preset = [
-  "@babel/preset-env",
-  {
-    targets: {
-      browsers: [
-        '> 5%, last 3 major versions'
+const { resolve } = require('path');
+
+const rootPath =  resolve(__dirname, "src");
+
+const presets = [
+  [
+    "@babel/preset-env", {
+    "targets": {
+      "browsers": [
+        "> 5%, last 3 major versions"
       ],
       node: 'current'
-    }
-  },
-  "@babel/preset-react"
+    },
+    "modules": "auto"
+  }],
+  ["@babel/preset-react"]
 ];
 
-const plugins =  [
+const plugins = [
   [
     "@babel/plugin-transform-runtime",
+    {
+      regenerator: true,
+      root: [rootPath],
+      extensions: [
+        '.ios.ts',
+        '.android.ts',
+        '.ts',
+        '.ios.tsx',
+        '.android.tsx',
+        '.tsx',
+        '.jsx',
+        '.js',
+        '.json',
+      ]
+    }
+  ],
+  [
+    'module-resolver',
     {
       root: [rootPath],
       extensions: [
@@ -36,4 +59,4 @@ const babelConfig = {
   plugins
 };
 
-export default babelConfig;
+module.exports = babelConfig;

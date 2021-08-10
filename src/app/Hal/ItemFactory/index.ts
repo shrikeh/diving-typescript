@@ -1,5 +1,5 @@
-import { ItemFactory as ItemFactoryInterface } from './ItemFactory';
+import { ItemFactory } from './ItemFactory';
 
-export type ItemFactory = ItemFactoryInterface;
+export { ItemFactory };
 
 export default ItemFactory;

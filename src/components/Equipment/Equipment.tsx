@@ -4,6 +4,9 @@ import React, { ReactElement } from 'react';
 // import SvgIcon, { SvgIconProps } from '@material-ui/core/SvgIcon';
 // import Typography from '@material-ui/core/Typography';
 
-export default function Equipment(): ReactElement {
+export function Equipment(): ReactElement {
   return <div test-id="ohai">Hello</div>;
 }
+
+
+export default Equipment;

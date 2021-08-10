@@ -4,7 +4,10 @@ import { Manufacturer } from "~diving/Manufacturer";
 
 export class HalManufacturerFactory implements ManufacturerFactory {
   fromHal(resource: ManufacturerResource): Manufacturer {
-    return new Manufacturer();
+    return Manufacturer.create(
+      resource.name,
+      resource.homePage
+    );
   }
 }
 

@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Appy from './Appy';
+import App from '~app/App';
 
 export const diving = () => {
   ReactDOM.render(
-    <Appy />,
+    <App />,
     document.getElementById('root')
   );
 };
