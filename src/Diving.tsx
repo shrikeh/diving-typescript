@@ -1,10 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Appy from './Appy';
+import { App } from '~app/App';
 
-export const diving = () => {
+export function diving(): void {
   ReactDOM.render(
-    <Appy />,
+    <App />,
     document.getElementById('root')
   );
-};
+}
+
+export default diving;
+

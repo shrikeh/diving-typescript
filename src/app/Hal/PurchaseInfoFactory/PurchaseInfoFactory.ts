@@ -1,4 +1,6 @@
+import { PurchaseInfo } from '~diving/PurchaseInfo';
+import { Resource } from 'halfred';
 
 export interface PurchaseInfoFactory {
-  fromHal()
+  fromHal(resource: Resource): PurchaseInfo;
 }

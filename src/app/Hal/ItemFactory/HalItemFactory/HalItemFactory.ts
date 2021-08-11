@@ -1,12 +1,8 @@
 import ItemFactory from "../ItemFactory";
 import { KitItem } from "~diving/KitItem";
 import { KitResource, ManufacturerResource } from "~app/Hal/types";
-import PurchaseInfo from "~diving/PurchaseInfo";
-import { ManufacturerFactory } from "~app/Hal/ManufacturerFactory/ManufacturerFactory";
-
-interface PurchaseInfoFactory {
-  fromJson(json: object): PurchaseInfo
-}
+import { ManufacturerFactory } from "~app/Hal/ManufacturerFactory";
+import { PurchaseInfoFactory } from "~app/Hal/PurchaseInfoFactory";
 
 export class HalItemFactory implements ItemFactory {
 

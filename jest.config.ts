@@ -19,7 +19,7 @@ export default async (): Promise<Config.InitialOptions> => {
   return {
     globals: {
       'ts-jest': {
-        babelConfig: true
+        //babelConfig: true
       }
     },
     cacheDirectory: '<rootDir>/build/.cache',

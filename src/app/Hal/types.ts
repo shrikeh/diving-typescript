@@ -4,7 +4,7 @@ export type Money = {
 
 };
 
-export type PurchaseInfo = {
+export type PurchaseInfo = Resource & {
   price: Money
 }
 
