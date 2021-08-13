@@ -2,7 +2,7 @@ import "module-alias/register";
 import type { Config } from "@jest/types";
 import { defaults } from "jest-config";
 import { pathsToModuleNameMapper } from "ts-jest/utils";
-
+import { resolve } from "path";
 
 const { compilerOptions } = require('./tsconfig');
 
@@ -18,9 +18,11 @@ const cssProxy = {
 export default async (): Promise<Config.InitialOptions> => {
   return {
     globals: {
+      "__fixturesDir": resolve(__dirname, 'tests/fixtures'),
       'ts-jest': {
         //babelConfig: true
       }
+
     },
     cacheDirectory: '<rootDir>/build/.cache',
     verbose: true,

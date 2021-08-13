@@ -1,0 +1,40 @@
+{
+  "_links": {
+    "self": {
+      "title": "O`Three Ri 2-100",
+      "href": "/item/ri-2-100-drysuit"
+    },
+    "kit:img": {
+      "href": "https://assets.shrikeh.net/img/ri-2-100-drysuit"
+    },
+    "kit:thumb": {
+      "href": "https://assets.shrikeh.net/img/ri-2-100-drysuit-small"
+    }
+  },
+  "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
+  "name": "Ri 2-100 Drysuit",
+  "purchaseInfo": {
+    "purchased": "2016-08-29",
+    "price": {
+      "amount": 100,
+      "currency": "GBP"
+    }
+  },
+  "_embedded": {
+    "kit:manufacturer": {
+      "_links": {
+        "self": {
+          "href": "/manufacturer/o-three",
+          "title": "O`Three"
+        },
+        "logo:img": {
+          "href": "https://assets.shrikeh.net/img/o-three.png",
+          "title": "O`Three logo"
+        }
+      },
+      "name": "ACME Corporation",
+      "homePage": "https://www.acme-corp.com",
+      "phone": "+44 1234 555 666"
+    }
+  }
+}

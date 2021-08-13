@@ -242,7 +242,7 @@ components:
         - _links
         - id
         - name
-        - purchased
+        - purchaseInfo
       properties:
         _links:
           $ref: '#/components/schemas/HalKitItem'
@@ -253,12 +253,8 @@ components:
         name:
           type: string
           example: 'Ri 2-100 Drysuit'
-        purchased:
-          type: string
-          format: date
-          example: '2016-08-29'
-        price:
-          $ref: '#/components/schemas/Money'
+        purchaseInfo:
+          $ref: '#/components/schemas/PurchaseInfo'
         _embedded:
           type: object
           format: hal
@@ -354,6 +350,20 @@ components:
       format: phone
       pattern: '^\+((?:9[679]|8[035789]|6[789]|5[90]|42|3[578]|2[1-689])|9[0-58]|8[1246]|6[0-6]|5[1-8]|4[013-9]|3[0-469]|2[70]|7|1)(?:\W*\d){0,13}\d$'
       example: '+44 1234 555 666'
+    PurchaseInfo:
+      type: object
+      properties:
+        price:
+          $ref: '#/components/schemas/Money'
+        purchased:
+          type: string
+          format: date
+          example: '2016-08-29'
+      required:
+        - price
+        - purchased
+
+
     Error:
       type: object
       properties:

@@ -3,27 +3,47 @@ version: "3.9"
 
 services:
   api:
-    container_name: api.shrikeh.local
+    container_name: "${NGINX_API_HOSTNAME}"
     image: nginx:1.21.1-alpine
     ports:
-      - 443:443
+      - "443:${NGINX_HTTPS_PORT}"
+    environment:
+      NGINX_API_HOSTNAME: "${NGINX_API_HOSTNAME}"
+      NGINX_HTTPS_PORT: "${NGINX_HTTPS_PORT}"
+      PRISM_MOCK_HOSTNAME: "${PRISM_MOCK_HOSTNAME}"
+      PRISM_MOCK_PORT: "${PRISM_MOCK_PORT}"
+      PRISM_PROXY_HOSTNAME: "${PRISM_PROXY_HOSTNAME}"
+      PRISM_PROXY_PORT: "${PRISM_PROXY_PORT}"
     networks:
-      - prism
+      - prism-mock
+      - prism-proxy
     depends_on:
-      - prism
+      - prism-mock
+      - prism-proxy
     volumes:
-      - "${PWD}/tools/docker/api/default.conf:/etc/nginx/conf.d/default.conf:ro"
+      - "${PWD}/tools/docker/api/templates:/etc/nginx/templates:ro"
       - "${PWD}/tools/tls:/etc/tls:ro"
-  prism:
-    container_name: prism.shrikeh.local
-    command: "proxy -h 0.0.0.0 /tmp/${API_FILE} ${API_ENDPOINT}"
+  prism-mock:
+    container_name: "${PRISM_MOCK_HOSTNAME}"
+    command: "mock -p ${PRISM_MOCK_PORT} -h 0.0.0.0 /tmp/${API_FILE}"
     image: stoplight/prism:4
     volumes:
       - "${PWD}/api.yml:/tmp/${API_FILE}:ro"
     expose:
-      - 4010
+      - "${PRISM_MOCK_PORT}"
     networks:
-      - prism
+      - prism-mock
+  prism-proxy:
+    container_name: prism-proxy.shrikeh.local
+    command: "proxy -p ${PRISM_PROXY_PORT} -h 0.0.0.0 /tmp/${API_FILE} ${API_ENDPOINT}"
+    image: stoplight/prism:4
+    volumes:
+      - "${PWD}/api.yml:/tmp/${API_FILE}:ro"
+    expose:
+      - "${PRISM_PROXY_PORT}"
+    networks:
+      - prism-proxy
 
 networks:
-  prism:
+  prism-mock:
+  prism-proxy:
