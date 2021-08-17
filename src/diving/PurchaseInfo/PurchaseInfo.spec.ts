@@ -5,8 +5,8 @@ import { Price } from '~diving/Price';
 describe('PurchaseInfo tests', () => {
   const today = new Date();
   const price = Price.create(777.65, 'GBP');
-
   const purchaseUri = new URL('https://simplyscuba.com');
+
   test('It throws an error if the purchase date is in the future', () => {
     const tomorrow = new Date();
     tomorrow.setDate(today.getDate() + 1);

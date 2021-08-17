@@ -20,9 +20,8 @@ export default async (): Promise<Config.InitialOptions> => {
     globals: {
       "__fixturesDir": resolve(__dirname, 'tests/fixtures'),
       'ts-jest': {
-        //babelConfig: true
-      }
 
+      }
     },
     cacheDirectory: '<rootDir>/build/.cache',
     verbose: true,
@@ -30,8 +29,9 @@ export default async (): Promise<Config.InitialOptions> => {
     roots: ["<rootDir>/src"],
     testRegex: '.*\.spec.tsx?$',
     moduleFileExtensions: [...defaults.moduleFileExtensions, "ts", "tsx"],
+    testEnvironment: "jsdom",
     transform: {
-      "^.+\\.[jt]sx?$": "ts-jest"
+      "^.+\\.[jt]sx?$": "babel-jest"
     },
     moduleNameMapper: {
       ...tsAliasPaths,
@@ -48,7 +48,7 @@ export default async (): Promise<Config.InitialOptions> => {
       "enzyme-to-json/serializer"
     ],
     setupFiles: [
-      '<rootDir>/tests/setupTests.ts'
+      '<rootDir>/tests/setupEnzyme.ts'
     ]
   };
 };
