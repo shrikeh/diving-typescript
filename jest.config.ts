@@ -8,7 +8,7 @@ const { compilerOptions } = require('./tsconfig');
 const tsAliasPaths = pathsToModuleNameMapper(
   compilerOptions.paths,
   { prefix: "<rootDir>" }
-  );
+);
 
 const cssProxy = {
   "^.+\\.(css|less)$": "identity-obj-proxy"
@@ -17,9 +17,6 @@ const cssProxy = {
 export default async (): Promise<Config.InitialOptions> => {
   return {
     globals: {
-      'ts-jest': {
-        //babelConfig: true
-      }
     },
     cacheDirectory: '<rootDir>/build/.cache',
     verbose: true,
@@ -28,7 +25,7 @@ export default async (): Promise<Config.InitialOptions> => {
     testRegex: '.*\.spec.tsx?$',
     moduleFileExtensions: [...defaults.moduleFileExtensions, "ts", "tsx"],
     transform: {
-      "^.+\\.[jt]sx?$": "ts-jest"
+      "^.+\\.[jt]sx?$": "babel-jest"
     },
     moduleNameMapper: {
       ...tsAliasPaths,
@@ -45,7 +42,7 @@ export default async (): Promise<Config.InitialOptions> => {
       "enzyme-to-json/serializer"
     ],
     setupFiles: [
-      '<rootDir>/tests/setupTests.ts'
+      '<rootDir>/tests/setupEnzyme.ts'
     ]
   };
 };

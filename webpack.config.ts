@@ -12,7 +12,12 @@ const distDir = resolve(__dirname, 'dist');
 
 export const DevServerConfig: WebpackDevServer.Configuration = {
   https: true,
-  compress: true
+  compress: true,
+  static: [{
+    directory: distDir
+  }],
+  host: "localhost",
+  port: 8081
 };
 
 const miniExtractCssOptions = {

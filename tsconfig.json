@@ -1,6 +1,6 @@
 {
   "include": [
-    "./src"
+    "src"
   ],
   "exclude": [
     "node_modules"
@@ -15,7 +15,7 @@
     "target": "esnext",
     "strict": true,
     "rootDir": ".",
-    "baseUrl": "./",
+    "baseUrl": ".",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
@@ -32,11 +32,11 @@
     "noEmit": false,
     "sourceMap": true,
     "paths": {
-      "*": ["types/*", "*"],
-      "~app/*": ["src/app/*"],
-      "~diving/*": ["src/diving/*"],
-      "~components/*": ["src/components/*"],
-      "~gulp/*": ["tools/gulp/*"],
+      "~app/*": [ "src/app/*" ],
+      "~diving/*": [ "src/diving/*" ],
+      "~components/*": [ "src/components/*" ],
+      "~gulp/*": [ "tools/gulp/*" ],
+      "*": ["types/*", "*"]
     },
     "typeRoots": [
       "node_modules/@types",
