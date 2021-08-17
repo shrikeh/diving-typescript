@@ -6,7 +6,7 @@ export class Manufacturer {
     );
   }
 
-  constructor(readonly name: string, readonly url: URL) {}
+  constructor(readonly name: string, readonly homepage: URL) {}
 
   toString(): string {
     return this.getName();
@@ -16,8 +16,8 @@ export class Manufacturer {
     return this.name;
   }
 
-  getUrl(): URL {
-    return this.url;
+  getHomepage(): URL {
+    return this.homepage;
   }
 }
 

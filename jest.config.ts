@@ -3,12 +3,11 @@ import type { Config } from "@jest/types";
 import { defaults } from "jest-config";
 import { pathsToModuleNameMapper } from "ts-jest/utils";
 
-
 const { compilerOptions } = require('./tsconfig');
 
 const tsAliasPaths = pathsToModuleNameMapper(
   compilerOptions.paths,
-  { prefix: "<rootDir>/src"}
+  { prefix: "<rootDir>" }
   );
 
 const cssProxy = {
@@ -19,7 +18,7 @@ export default async (): Promise<Config.InitialOptions> => {
   return {
     globals: {
       'ts-jest': {
-        babelConfig: true
+        //babelConfig: true
       }
     },
     cacheDirectory: '<rootDir>/build/.cache',
