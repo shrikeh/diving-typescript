@@ -1,12 +1,19 @@
 import { resolve } from 'path';
+import { WebpackDevServer } from 'webpack-dev-server-types';
 import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
 import SriPlugin from 'webpack-subresource-integrity';
+import { Configuration } from 'webpack';
 const CspHtmlWebpackPlugin = require('csp-html-webpack-plugin');
 
 const distDir = resolve(__dirname, 'dist');
+
+export const DevServerConfig: WebpackDevServer.Configuration = {
+  https: true,
+  compress: true
+};
 
 const miniExtractCssOptions = {
   filename: "css/[name].css",
@@ -22,13 +29,11 @@ const htmlWebpackOptions = {
   }
 }
 
-module.exports = {
+export const WebpackConfig: Configuration = {
   mode: 'development',
   entry: './src/index.ts',
   devtool: 'source-map',
-  devServer: {
-    contentBase: distDir
-  },
+  devServer: DevServerConfig,
   module: {
     rules: [
       {
@@ -84,3 +89,5 @@ module.exports = {
     })
   ]
 };
+
+export default WebpackConfig;

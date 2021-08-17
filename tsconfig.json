@@ -15,7 +15,7 @@
     "target": "esnext",
     "strict": true,
     "rootDir": ".",
-    "baseUrl": "./src",
+    "baseUrl": "./",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
@@ -32,9 +32,15 @@
     "noEmit": false,
     "sourceMap": true,
     "paths": {
-      "~app/*": ["app/*"],
-      "~diving/*": ["diving/*"],
-      "~components/*": ["components/*"]
-    }
+      "*": ["types/*", "*"],
+      "~app/*": ["src/app/*"],
+      "~diving/*": ["src/diving/*"],
+      "~components/*": ["src/components/*"],
+      "~gulp/*": ["tools/gulp/*"],
+    },
+    "typeRoots": [
+      "node_modules/@types",
+      "types"
+    ]
   }
 }

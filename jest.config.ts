@@ -3,12 +3,11 @@ import type { Config } from "@jest/types";
 import { defaults } from "jest-config";
 import { pathsToModuleNameMapper } from "ts-jest/utils";
 
-
 const { compilerOptions } = require('./tsconfig');
 
 const tsAliasPaths = pathsToModuleNameMapper(
   compilerOptions.paths,
-  { prefix: "<rootDir>/src"}
+  { prefix: "<rootDir>" }
   );
 
 const cssProxy = {
