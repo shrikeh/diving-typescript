@@ -1,4 +1,3 @@
-import { describe, test, expect } from '@jest/globals';
 import { Manufacturer } from '~diving/Manufacturer';
 
 describe('Manufacturer tests', () => {

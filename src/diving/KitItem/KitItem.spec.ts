@@ -1,5 +1,3 @@
-import { describe, test, expect } from '@jest/globals';
-
 import { Manufacturer } from '~diving/Manufacturer';
 import { PurchaseInfo } from '~diving/PurchaseInfo';
 import { KitItem } from '~diving/KitItem';

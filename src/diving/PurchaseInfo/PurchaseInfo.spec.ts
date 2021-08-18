@@ -1,4 +1,3 @@
-import { describe, test, expect } from '@jest/globals';
 import { PurchaseInfo, PurchaseDateInFuture } from '~diving/PurchaseInfo';
 import { Price } from '~diving/Price';
 

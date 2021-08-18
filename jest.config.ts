@@ -1,39 +1,27 @@
 import "module-alias/register";
 import type { Config } from "@jest/types";
 import { defaults } from "jest-config";
-import { pathsToModuleNameMapper } from "ts-jest/utils";
-
-const { compilerOptions } = require('./tsconfig');
-
-const tsAliasPaths = pathsToModuleNameMapper(
-  compilerOptions.paths,
-  { prefix: "<rootDir>" }
-);
-
-const cssProxy = {
-  "^.+\\.(css|less)$": "identity-obj-proxy"
-};
 
 export default async (): Promise<Config.InitialOptions> => {
   return {
     globals: {
     },
     cacheDirectory: '<rootDir>/build/.cache',
+    testEnvironment: 'jsdom',
     verbose: true,
     preset: 'ts-jest',
     roots: ["<rootDir>/src"],
     testRegex: '.*\.spec.tsx?$',
     moduleFileExtensions: [...defaults.moduleFileExtensions, "ts", "tsx"],
+    moduleNameMapper: {
+      "\\.(css|less|scss|sass)$": "identity-obj-proxy"
+    },
     transform: {
       "^.+\\.[jt]sx?$": "babel-jest"
     },
-    moduleNameMapper: {
-      ...tsAliasPaths,
-      ...cssProxy
-    },
     modulePaths: [
-      '<roorDir>/tests/fixtures',
-      '<rootDir>/src'
+      '<roorDir>/tests/fixtures/',
+      '<rootDir>/src/'
     ],
     setupFilesAfterEnv: [
       "@testing-library/jest-dom/extend-expect"

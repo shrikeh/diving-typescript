@@ -1,4 +1,3 @@
-import { describe, expect, test } from '@jest/globals';
 import Decimal from 'decimal.js';
 import { sprintf } from 'sprintf-js';
 import { AmountNotPositive, CurrencyIsoCode, Price } from '~diving/Price';
