@@ -6,6 +6,8 @@ const {
 
 const configLoaderResult = loadConfig();
 
+console.log(configLoaderResult);
+
 const extensions = ['.js', '.jsx', '.ts', '.tsx'];
 
 const configLoaderSuccessResult =
@@ -24,7 +26,10 @@ const moduleResolver = configLoaderSuccessResult && [
     extensions,
     resolvePath: (sourcePath, currentFile, opts) => {
       if (matchPath) {
-        return matchPath(sourcePath, require, fs.existsSync, extensions);
+        try {
+          return matchPath(sourcePath, require, fs.existsSync, extensions);
+        } catch(e) {
+        }
       }
 
       return defaultResolvePath(sourcePath, currentFile, opts);

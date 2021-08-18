@@ -1,10 +1,12 @@
 import "module-alias/register";
+import { resolve } from 'path';
 import type { Config } from "@jest/types";
 import { defaults } from "jest-config";
 
 export default async (): Promise<Config.InitialOptions> => {
   return {
     globals: {
+      "__fixturesDir": resolve(__dirname, 'tests/fixtures')
     },
     cacheDirectory: '<rootDir>/build/.cache',
     testEnvironment: 'jsdom',

@@ -1,8 +1,8 @@
-/// <reference path="webpack-dev-server.d.ts" />
 import { webpack } from 'webpack';
 import { WebpackConfig, DevServerConfig } from '../../webpack.config';
 import log from 'fancy-log';
 
+// @ts-ignore
 import Server from "webpack-dev-server";
 
 function webpackDevServer(cb: Function): void {

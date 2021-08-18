@@ -36,7 +36,7 @@
       "~diving/*": [ "src/diving/*" ],
       "~components/*": [ "src/components/*" ],
       "~gulp/*": [ "tools/gulp/*" ],
-      "*": [ "node_modules/*", "types/*" ]
+      "*": [ "*", "node_modules/*", "types/*"  ]
     },
     "typeRoots": [
       "node_modules/@types",
