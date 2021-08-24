@@ -1,0 +1,19 @@
+package diving;
+syntax = "proto3";
+
+import "./hal_link.proto";
+
+message Manufacturer {
+  ManufacturerHalLinks _links = 1;
+  string name = 2;
+  string home_page = 3;
+  optional string phone = 4;
+
+}
+
+message ManufacturerHalLinks {
+  HalHrefLink self = 1;
+  HalHrefLink logo_img = 2;
+}
+
+

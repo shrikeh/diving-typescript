@@ -1,23 +1,26 @@
-import { resolve } from 'path';
-import { WebpackDevServer } from 'webpack-dev-server-types';
-import { TsconfigPathsPlugin } from 'tsconfig-paths-webpack-plugin';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import MiniCssExtractPlugin from "mini-css-extract-plugin";
+import "dotenv/config";
+import { __distDir } from "./env";
+import { resolve } from "path";
+import { WebpackDevServer } from "webpack-dev-server-types";
+import { Configuration } from "webpack";
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
-import SriPlugin from 'webpack-subresource-integrity';
-import { Configuration } from 'webpack';
-const CspHtmlWebpackPlugin = require('csp-html-webpack-plugin');
-
-const distDir = resolve(__dirname, 'dist');
+const CspHtmlWebpackPlugin = require("csp-html-webpack-plugin");
+import HtmlWebpackPlugin from "html-webpack-plugin";
+import MiniCssExtractPlugin from "mini-css-extract-plugin";
+import SriPlugin from "webpack-subresource-integrity";
+import { TsconfigPathsPlugin } from "tsconfig-paths-webpack-plugin";
 
 export const DevServerConfig: WebpackDevServer.Configuration = {
-  https: true,
   compress: true,
   static: [{
-    directory: distDir
+    directory: __distDir
   }],
   host: "localhost",
-  port: 8081
+  port: 8443,
+  https: {
+    cert: "tools/tls/certs/nginx-selfsigned.crt",
+    key: "tools/tls/private/nginx-selfsigned.key",
+  }
 };
 
 const miniExtractCssOptions = {
@@ -25,7 +28,7 @@ const miniExtractCssOptions = {
 };
 
 const htmlWebpackOptions = {
-  template: resolve(__dirname, 'templates/index.ejs'),
+  template: resolve(__dirname, "templates/index.ejs"),
   title: "Barney's Diving Site",
   inject: false,
   meta: {
@@ -35,9 +38,9 @@ const htmlWebpackOptions = {
 }
 
 export const WebpackConfig: Configuration = {
-  mode: 'development',
-  entry: './src/index.ts',
-  devtool: 'source-map',
+  mode: "development",
+  entry: "./src/index.ts",
+  devtool: "source-map",
   devServer: DevServerConfig,
   module: {
     rules: [
@@ -55,7 +58,7 @@ export const WebpackConfig: Configuration = {
         exclude: /node_modules/,
         use: [
           {
-            loader: 'ts-loader'
+            loader: "ts-loader"
           },
         ]
       },
@@ -72,13 +75,13 @@ export const WebpackConfig: Configuration = {
   },
   resolve: {
     plugins: [new TsconfigPathsPlugin()],
-    extensions: ['.tsx', '.ts', '.js'],
+    extensions: [".tsx", ".ts", ".js"],
   },
   output: {
-    filename: 'js/main.js',
-    path: distDir,
+    filename: "js/main.js",
+    path: __distDir,
     publicPath: "/",
-    crossOriginLoading: 'anonymous'
+    crossOriginLoading: "anonymous"
   },
   plugins: [
     new CleanWebpackPlugin(),
@@ -86,11 +89,11 @@ export const WebpackConfig: Configuration = {
     new MiniCssExtractPlugin(miniExtractCssOptions),
     new SriPlugin({
       enabled: true,
-      hashFuncNames: [ 'sha384' ]
+      hashFuncNames: [ "sha384" ]
     }),
     new CspHtmlWebpackPlugin({
-      'script-src': '',
-      'style-src': ''
+      "script-src": "",
+      "style-src": ""
     })
   ]
 };

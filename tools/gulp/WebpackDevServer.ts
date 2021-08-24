@@ -5,7 +5,7 @@ import log from 'fancy-log';
 // @ts-ignore
 import Server from "webpack-dev-server";
 
-function webpackDevServer(cb: Function): void {
+export default function WebpackDevServer(cb: Function): void {
   const compiler = webpack(WebpackConfig);
   const server = new Server(DevServerConfig, compiler);
 
@@ -14,5 +14,3 @@ function webpackDevServer(cb: Function): void {
   });
   cb();
 }
-
-export default webpackDevServer;

@@ -14,8 +14,8 @@
     "outDir": "./dist/js",
     "target": "esnext",
     "strict": true,
-    "rootDir": "./",
-    "baseUrl": "./",
+    "rootDir": ".",
+    "baseUrl": ".",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
@@ -36,6 +36,7 @@
       "~diving/*": [ "src/diving/*" ],
       "~components/*": [ "src/components/*" ],
       "~gulp/*": [ "tools/gulp/*" ],
+      "~/*": [ "./*" ],
       "*": [ "*", "node_modules/*", "types/*"  ]
     },
     "typeRoots": [

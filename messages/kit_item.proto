@@ -1,0 +1,25 @@
+package diving;
+syntax = "proto3";
+
+import "./manufacturer.proto";
+import "./purchase_info.proto";
+import "./hal_link.proto";
+
+message KitItem {
+  ItemHalLinks _links = 1;
+  string id = 2;
+  string name = 3;
+  PurchaseInfo purchaseInfo = 4;
+  optional ItemEmbeddedLinks _embedded = 5;
+}
+
+message ItemHalLinks {
+  HalHrefLink self = 1;
+  HalHrefLink kit_img = 2;
+  HalHrefLink kit_thumb = 3;
+  optional HalHrefLink item_referral = 4;
+}
+
+message ItemEmbeddedLinks {
+  Manufacturer kit_manufacturer = 1;
+}

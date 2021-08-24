@@ -1,0 +1,8 @@
+package diving;
+syntax = "proto3";
+
+import "./test_nested.proto";
+
+message Test {
+  TestNested hello = 1;
+}

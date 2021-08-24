@@ -6,8 +6,6 @@ const {
 
 const configLoaderResult = loadConfig();
 
-console.log(configLoaderResult);
-
 const extensions = ['.js', '.jsx', '.ts', '.tsx'];
 
 const configLoaderSuccessResult =

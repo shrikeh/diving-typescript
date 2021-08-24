@@ -1,0 +1,6 @@
+package diving;
+syntax = "proto3";
+
+message TestNested {
+  string hello = 1;
+}

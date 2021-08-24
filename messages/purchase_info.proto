@@ -1,0 +1,12 @@
+package diving;
+syntax = "proto3";
+
+message PurchaseInfo {
+  string purchased = 2;
+  Price price = 3;
+}
+
+message Price {
+  int32 amount = 1;
+  string currency = 2;
+}

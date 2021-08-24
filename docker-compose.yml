@@ -3,27 +3,49 @@ version: "3.9"
 
 services:
   api:
-    container_name: api.shrikeh.local
+    container_name: "${NGINX_API_HOSTNAME:?err}"
     image: nginx:1.21.1-alpine
     ports:
-      - 443:443
+      - "443:${NGINX_HTTPS_PORT:?err}"
+    environment:
+      NGINX_API_HOSTNAME: "${NGINX_API_HOSTNAME:?err}"
+      NGINX_HTTPS_PORT: "${NGINX_HTTPS_PORT:-443}"
+      PRISM_MOCK_HOSTNAME: "${PRISM_MOCK_HOSTNAME:?err}"
+      PRISM_MOCK_PORT: "${PRISM_MOCK_PORT:?err}"
+      PRISM_PROXY_HOSTNAME: "${PRISM_PROXY_HOSTNAME:?err}"
+      PRISM_PROXY_PORT: "${PRISM_PROXY_PORT:?err}"
     networks:
-      - prism
+      - prism-mock
+      - prism-proxy
     depends_on:
-      - prism
+      - prism-mock
+      - prism-proxy
     volumes:
-      - "${PWD}/tools/docker/api/default.conf:/etc/nginx/conf.d/default.conf:ro"
+      - "${PWD}/tools/docker/api/templates:/etc/nginx/templates:ro"
       - "${PWD}/tools/tls:/etc/tls:ro"
-  prism:
-    container_name: prism.shrikeh.local
-    command: "proxy -h 0.0.0.0 /tmp/${API_FILE} ${API_ENDPOINT}"
+  prism-mock:
+    container_name: "${PRISM_MOCK_HOSTNAME:?err}"
+    command: "mock -p ${PRISM_MOCK_PORT:?err} -h 0.0.0.0 /tmp/${API_FILE:?err}"
     image: stoplight/prism:4
     volumes:
-      - "${PWD}/api.yml:/tmp/${API_FILE}:ro"
+      - "${PWD}/api.yml:/tmp/${API_FILE:?err}:ro"
     expose:
-      - 4010
+      - "${PRISM_MOCK_PORT:?err}"
     networks:
-      - prism
+      - prism-mock
+  prism-proxy:
+    container_name: prism-proxy.shrikeh.local
+    command: "proxy -p ${PRISM_PROXY_PORT:?err} -h 0.0.0.0 /tmp/${API_FILE:?err} ${API_ENDPOINT:?err}"
+    image: stoplight/prism:4
+    volumes:
+      - "${PWD}/api.yml:/tmp/${API_FILE:?err}:ro"
+    expose:
+      - "${PRISM_PROXY_PORT}"
+    networks:
+      - prism-proxy
+  pact-broker:
+    image: pactfoundation/pact-broker:2.81.0.1
 
 networks:
-  prism:
+  prism-mock:
+  prism-proxy:
