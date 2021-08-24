@@ -71,7 +71,7 @@ paths:
                   - $ref: '#/components/schemas/HeaderStrictTransportSecurity'
               example: 'max-age=63072000; includeSubDomains; preload'
           content:
-            application/hal+json:
+            'application/hal+json':
               schema:
                 type: object
                 properties:
@@ -162,12 +162,12 @@ paths:
                   - $ref: '#/components/schemas/HeaderStrictTransportSecurity'
               example: 'max-age=63072000; includeSubDomains; preload'
           content:
-            application/hal+json:
+            'application/hal+json':
               schema:
                 $ref: '#/components/schemas/KitItem'
-            application/protobuf:
+            'application/vnd.google.protobuf':
               schema:
-                $ref: '#/components/schemas/KitItemProtobuf'
+                $ref: '#/components/schemas/ProtobufMessage'
         '404':
           $ref: '#/components/responses/NotFound'
 
@@ -184,9 +184,15 @@ components:
     NotFound:
       description: The specified resource was not found
       content:
-        application/json:
+        'application/hal+json':
           schema:
             $ref: '#/components/schemas/Error'
+    Protobuf:
+      description: A Protobuf-encoded version of the content
+      content:
+        'application/vnd.google.protobuf':
+          schema:
+            $ref: '#/components/schemas/ProtobufMessage'
   schemas:
     HeaderAge:
       type: integer
@@ -377,7 +383,8 @@ components:
       required:
         - code
         - message
-    KitItemProtobuf:
+    ProtobufMessage:
       type: string
       format: base64
-      example:
+      example: 'Zm9vYmFyYmF6Ym9v'
+
