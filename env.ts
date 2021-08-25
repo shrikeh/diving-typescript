@@ -7,3 +7,4 @@ export const __messagesDir = resolve(__dirname, "messages");
 export const __distDir = resolve(__dirname, "dist");
 export const __srcDir = resolve(__dirname, "src");
 export const __logsDir = resolve(__dirname, "logs");
+export const __pactsDir = resolve(__testsDir, "pacts");

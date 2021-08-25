@@ -2,14 +2,13 @@ import "dotenv/config";
 import "module-alias/register";
 import type { Config } from "@jest/types";
 import { defaults } from "jest-config";
-import { __fixturesDir, __logsDir } from "./env";
+import * as _env from "./env";
 
 export default async (): Promise<Config.InitialOptions> => {
 
   return {
     globals: {
-      "__fixturesDir": __fixturesDir,
-      "__logsDir": __logsDir
+      ..._env
     },
     cacheDirectory: "<rootDir>/build/.cache",
     testEnvironment: "jsdom",

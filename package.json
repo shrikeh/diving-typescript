@@ -95,7 +95,8 @@
     "start": "webpack serve --open",
     "watch": "webpack --watch",
     "build": "webpack",
-    "test": "jest",
+    "test:spec": "jest --testPathPattern='./src/'",
+    "test:int": "jest --testPathPattern='./tests/integration/'",
     "lint": "eslint src"
   },
   "type": "module"
