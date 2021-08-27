@@ -2,7 +2,7 @@
  * @jest-environment node
  */
 import { pactWith } from "jest-pact";
-import { InteractionObject, Matchers } from "@pact-foundation/pact";
+import { InteractionObject, Publisher } from "@pact-foundation/pact";
 
 import { HTTPMethod } from "@pact-foundation/pact/src/common/request";
 import { resolve } from "path";
@@ -13,12 +13,14 @@ import { HalManufacturerFactory } from "~app/Hal/ManufacturerFactory/HalManufact
 import { HalPurchaseInfoFactory } from "~app/Hal/PurchaseInfoFactory/HalPurchaseInfoFactory";
 import { readFileSync } from "fs";
 
+const __pactsDir = (global as any).__pactsDir;
+
 pactWith(
   {
-    consumer: "Jest Consumer Example",
-    provider: "Jest Provider Example",
+    consumer: "Shrikeh.net Diving Kit Consumer",
+    provider: "Shrikeh.net Diving Kit Provider",
     log: resolve((global as any).__logsDir, "pact/pact.log"),
-    dir: (global as any).__pactsDir,
+    dir: __pactsDir,
     logLevel: "debug"
   },
   provider => {
@@ -79,6 +81,15 @@ pactWith(
         console.log(kitItem);
       });
 
+      afterAll(() => {
+        const pactBrokerHost = process.env.PACT_BROKER_HOSTNAME as string;
+        new Publisher({
+          pactFilesOrDirs: [ __pactsDir ],
+          pactBroker: "http://localhost",
+          providerBaseUrl: (process.env.API_ENDPOINT as string),
+          consumerVersion: "1.0.0"
+        }).publishPacts();
+      });
     });
   }
 );

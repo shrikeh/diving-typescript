@@ -34,7 +34,7 @@ services:
     networks:
       - prism-mock
   prism-proxy:
-    container_name: prism-proxy.shrikeh.local
+    container_name: "${PRISM_PROXY_HOSTNAME:?err}"
     command: "proxy -p ${PRISM_PROXY_PORT:?err} -h 0.0.0.0 /tmp/${API_FILE:?err} ${API_ENDPOINT:?err}"
     image: stoplight/prism:4
     volumes:
@@ -44,8 +44,40 @@ services:
     networks:
       - prism-proxy
   pact-broker:
+    container_name: "${PACT_BROKER_HOSTNAME:?err}"
     image: pactfoundation/pact-broker:2.81.0.1
-
+    environment:
+      PACT_BROKER_DATABASE:                       "${PACT_BROKER_DB_HOSTNAME?err}"
+      PACT_BROKER_DATABASE_NAME:                  "${PACT_BROKER_DB_NAME:?err}"
+      PACT_BROKER_DATABASE_USERNAME:              "${PACT_BROKER_DB_USERNAME:?err}"
+      PACT_BROKER_DATABASE_PASSWORD:              "${PACT_BROKER_DB_PASSWORD:?err}"
+      PACT_BROKER_DATABASE_CONNECT_MAX_RETRIES:   "5"
+      PACT_BROKER_PORT:                           "${PACT_BROKER_PORT:-9292}"
+    depends_on:
+      - pact-db
+    networks:
+      - prism-proxy
+      - pact-broker
+    ports:
+      - "${PACT_BROKER_PORT:-9292}:9292"
+  pact-db:
+    container_name: "${PACT_BROKER_DB_HOSTNAME:?err}"
+    image: postgres:13.4-alpine3.14
+    restart: always
+    healthcheck:
+      test: psql postgres --command "select 1" -U ${PACT_BROKER_DB_USERNAME:?err}
+    volumes:
+      - pact-postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB:       "${PACT_BROKER_DB_NAME:?err}"
+      POSTGRES_USER:     "${PACT_BROKER_DB_USERNAME:?err}"
+      POSTGRES_PASSWORD: "${PACT_BROKER_DB_PASSWORD:?err}"
+    networks:
+      - pact-broker
 networks:
+  pact-broker:
   prism-mock:
   prism-proxy:
+
+volumes:
+  pact-postgres:
