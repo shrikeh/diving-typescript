@@ -25,51 +25,32 @@ pactWith(
   },
   provider => {
     describe("KitItem test", () => {
-      const kitItemExpectedRequest = {
-        method: HTTPMethod.GET,
-        path: "/item/ri-2-100-drysuit",
-        headers: {
-          Accept: "application/hal+json"
-        }
-      };
+      const commonHeaders = {
+        "Age": "24",
+        "Content-Type": "application/hal+json",
+        "Cache-Control": "public, max-age=604800, immutable",
+        "Last-Modified": "Wed, 21 July 2021 07:28:00 GMT",
+        "Content-Security-Policy": "default-src 'self'; report-uri https://report.shrikeh.net/csp",
+        "Cross-Origin-Resource-Policy": "same-origin",
+        "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+        "Expires": "Wed, 21 Oct 2022 07:28:00 GMT",
+      }
 
-      const expectedBody = JSON.parse(
-        readFileSync(resolve((global as any).__fixturesDir, "KitItem.json")).toString()
+
+      const halItemFactory = new HalItemFactory(
+        new HalManufacturerFactory(),
+        new HalPurchaseInfoFactory()
       );
 
-      const kitItemResponse = {
-        status: 200,
-        headers: {
-          "Age": "24",
-          "Content-Type": "application/hal+json",
-          "Cache-Control": "public, max-age=604800, immutable",
-          "Etag": "169-ZvbJQlMiJ0Z/SvJhPuvYWPLgCiU",
-          "Expires": "Wed, 21 Oct 2022 07:28:00 GMT",
-          "Link": '<https://virtserver.swaggerhub.com/shrikeh/Diving2/1.0.0/kit/some-item-slug>; rel="canonical"',
-          "Last-Modified": "Wed, 21 July 2021 07:28:00 GMT",
-          "Content-Security-Policy": "default-src 'self'; report-uri https://report.shrikeh.net/csp",
-          "Cross-Origin-Resource-Policy": "same-origin",
-          "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload"
-        },
-        body: expectedBody
-      };
-
-      beforeEach(() => {
-        const interaction: InteractionObject = {
-          state: "i have a list of dogs",
-          uponReceiving: "a request for a kit item",
-          withRequest: kitItemExpectedRequest,
-          willRespondWith: kitItemResponse
+      it("Loads a Kit Item", async () => {
+        const kitItemExpectedRequest = {
+          method: HTTPMethod.GET,
+          path: "/kit/ri-2-100-drysuit",
+          headers: {
+            Accept: "application/hal+json"
+          }
         };
 
-        return provider.addInteraction(interaction);
-      });
-
-      it("Does stuff", async () => {
-        const halItemFactory = new HalItemFactory(
-          new HalManufacturerFactory(),
-          new HalPurchaseInfoFactory()
-        );
         const repo = new AxiosKitRepository(axios.create({
           baseURL: provider.mockService.baseUrl,
           headers: {
@@ -77,18 +58,79 @@ pactWith(
           }
         }), halItemFactory);
 
+        const kitItemResponse = {
+          status: 200,
+          headers: {
+            ...commonHeaders,
+            "Etag": "169-ZvbJQlMiJ0Z/SvJhPuvYWPLgCiU",
+            "Link": '<https://virtserver.swaggerhub.com/shrikeh/Diving2/1.0.0/kit/some-item-slug>; rel="canonical"',
+          },
+          body: JSON.parse(
+            readFileSync(resolve((global as any).__fixturesDir, "KitItem.json")).toString()
+          )
+        };
+
+        const interaction: InteractionObject = {
+          state: "I have an existing Kit Item",
+          uponReceiving: "a request for a kit item",
+          withRequest: kitItemExpectedRequest,
+          willRespondWith: kitItemResponse
+        };
+
+        await provider.addInteraction(interaction);
+
         const kitItem = await repo.fetchBySlug("ri-2-100-drysuit");
-        console.log(kitItem);
+        expect(kitItem.getName()).toBe('Ri 2-100 Drysuit');
+      });
+
+      it('Throws an exception if the kit item does not exist', async () => {
+        const repo = new AxiosKitRepository(axios.create({
+          baseURL: provider.mockService.baseUrl,
+          headers: {
+            Accept: "application/hal+json",
+          }
+        }), halItemFactory);
+
+        const kitItemExpectedRequest = {
+          method: HTTPMethod.GET,
+          path: "/kit/foo-bar-baz",
+          headers: {
+            Accept: "application/hal+json"
+          }
+        };
+
+        const kitItemResponse = {
+          status: 404,
+          headers: {
+            ...commonHeaders,
+            "Etag": "169-ZvbJQlMiJ0Z/SvJhPuvYWPLgCiU"
+          },
+          body: {
+            code: 404,
+            message: "Kit item not found"
+          }
+        };
+
+        const interaction: InteractionObject = {
+          state: "The kit Item does not exist",
+          uponReceiving: "a request for a kit item",
+          withRequest: kitItemExpectedRequest,
+          willRespondWith: kitItemResponse
+        };
+
+        await provider.addInteraction(interaction);
+
+        await expect(repo.fetchBySlug("foo-bar-baz")).rejects.toThrowError();
       });
 
       afterAll(() => {
-        const pactBrokerHost = process.env.PACT_BROKER_HOSTNAME as string;
-        new Publisher({
-          pactFilesOrDirs: [ __pactsDir ],
-          pactBroker: "http://localhost",
-          providerBaseUrl: (process.env.API_ENDPOINT as string),
-          consumerVersion: "1.0.0"
-        }).publishPacts();
+      //   const pactBrokerHost = process.env.PACT_BROKER_HOSTNAME as string;
+      //   new Publisher({
+      //     pactFilesOrDirs: [ __pactsDir ],
+      //     pactBroker: "http://localhost",
+      //     providerBaseUrl: (process.env.API_ENDPOINT as string),
+      //     consumerVersion: "1.0.0"
+      //   }).publishPacts();
       });
     });
   }

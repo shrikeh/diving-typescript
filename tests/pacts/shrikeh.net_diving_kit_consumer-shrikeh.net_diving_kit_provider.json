@@ -8,7 +8,7 @@
   "interactions": [
     {
       "description": "a request for a kit item",
-      "providerState": "i have a list of dogs",
+      "providerState": "I have an existing Kit Item",
       "request": {
         "method": "GET",
         "path": "/kit/ri-2-100-drysuit",
@@ -22,13 +22,13 @@
           "Age": "24",
           "Content-Type": "application/hal+json",
           "Cache-Control": "public, max-age=604800, immutable",
-          "Etag": "169-ZvbJQlMiJ0Z/SvJhPuvYWPLgCiU",
-          "Expires": "Wed, 21 Oct 2022 07:28:00 GMT",
-          "Link": "<https://virtserver.swaggerhub.com/shrikeh/Diving2/1.0.0/kit/some-item-slug>; rel=\"canonical\"",
           "Last-Modified": "Wed, 21 July 2021 07:28:00 GMT",
           "Content-Security-Policy": "default-src 'self'; report-uri https://report.shrikeh.net/csp",
           "Cross-Origin-Resource-Policy": "same-origin",
-          "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload"
+          "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+          "Expires": "Wed, 21 Oct 2022 07:28:00 GMT",
+          "Etag": "169-ZvbJQlMiJ0Z/SvJhPuvYWPLgCiU",
+          "Link": "<https://virtserver.swaggerhub.com/shrikeh/Diving2/1.0.0/kit/some-item-slug>; rel=\"canonical\""
         },
         "body": {
           "_links": {
@@ -69,6 +69,35 @@
               "phone": "+44 1234 555 666"
             }
           }
+        }
+      }
+    },
+    {
+      "description": "a request for a kit item",
+      "providerState": "The kit Item does not exist",
+      "request": {
+        "method": "GET",
+        "path": "/kit/foo-bar-baz",
+        "headers": {
+          "Accept": "application/hal+json"
+        }
+      },
+      "response": {
+        "status": 404,
+        "headers": {
+          "Age": "24",
+          "Content-Type": "application/hal+json",
+          "Cache-Control": "public, max-age=604800, immutable",
+          "Last-Modified": "Wed, 21 July 2021 07:28:00 GMT",
+          "Content-Security-Policy": "default-src 'self'; report-uri https://report.shrikeh.net/csp",
+          "Cross-Origin-Resource-Policy": "same-origin",
+          "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
+          "Expires": "Wed, 21 Oct 2022 07:28:00 GMT",
+          "Etag": "169-ZvbJQlMiJ0Z/SvJhPuvYWPLgCiU"
+        },
+        "body": {
+          "code": 404,
+          "message": "Kit item not found"
         }
       }
     }

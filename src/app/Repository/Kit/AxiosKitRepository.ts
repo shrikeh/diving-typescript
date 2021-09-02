@@ -12,7 +12,7 @@ export class AxiosKitRepository implements KitRepository {
 
   async fetchBySlug(slug: string): Promise<KitItem> {
     return this.client.request({
-      url: sprintf("/item/%s", slug),
+      url: sprintf("/kit/%s", slug),
       method: 'GET'
     }).then( (response: AxiosResponse): KitItem => {
       return this.itemFactory.fromHal(parseToHal(response));
