@@ -1,6 +1,5 @@
 ---
 version: "3.9"
-
 services:
   api:
     container_name: "${NGINX_API_HOSTNAME:?err}"
@@ -10,13 +9,8 @@ services:
     environment:
       NGINX_API_HOSTNAME: "${NGINX_API_HOSTNAME:?err}"
       NGINX_HTTPS_PORT: "${NGINX_HTTPS_PORT:-443}"
-      PRISM_MOCK_HOSTNAME: "${PRISM_MOCK_HOSTNAME:?err}"
       PRISM_MOCK_PORT: "${PRISM_MOCK_PORT:?err}"
-      PRISM_PROXY_HOSTNAME: "${PRISM_PROXY_HOSTNAME:?err}"
       PRISM_PROXY_PORT: "${PRISM_PROXY_PORT:?err}"
-    networks:
-      - prism-mock
-      - prism-proxy
     depends_on:
       - prism-mock
       - prism-proxy
@@ -24,60 +18,53 @@ services:
       - "${PWD}/tools/docker/api/templates:/etc/nginx/templates:ro"
       - "${PWD}/tools/tls:/etc/tls:ro"
   prism-mock:
-    container_name: "${PRISM_MOCK_HOSTNAME:?err}"
     command: "mock -p ${PRISM_MOCK_PORT:?err} -h 0.0.0.0 /tmp/${API_FILE:?err}"
-    image: stoplight/prism:4
+    image: "stoplight/prism:${STOPLIGHT_PRISM_TAG:-4.3.4}"
     volumes:
       - "${PWD}/api.yml:/tmp/${API_FILE:?err}:ro"
     expose:
       - "${PRISM_MOCK_PORT:?err}"
-    networks:
-      - prism-mock
   prism-proxy:
-    container_name: "${PRISM_PROXY_HOSTNAME:?err}"
-    command: "proxy -p ${PRISM_PROXY_PORT:?err} -h 0.0.0.0 /tmp/${API_FILE:?err} ${API_ENDPOINT:?err}"
+    command: "proxy -p ${PRISM_PROXY_PORT:?err} -h 0.0.0.0 /tmp/${API_FILE:?err} http://pact-stub/"
     image: stoplight/prism:4
     volumes:
       - "${PWD}/api.yml:/tmp/${API_FILE:?err}:ro"
     expose:
       - "${PRISM_PROXY_PORT}"
-    networks:
-      - prism-proxy
+    depends_on:
+      - pact-stub
   pact-broker:
-    container_name: "${PACT_BROKER_HOSTNAME:?err}"
     image: pactfoundation/pact-broker:2.81.0.1
     environment:
-      PACT_BROKER_DATABASE:                       "${PACT_BROKER_DB_HOSTNAME?err}"
+      PACT_BROKER_DATABASE_HOST:                  "pact-broker-db"
       PACT_BROKER_DATABASE_NAME:                  "${PACT_BROKER_DB_NAME:?err}"
       PACT_BROKER_DATABASE_USERNAME:              "${PACT_BROKER_DB_USERNAME:?err}"
       PACT_BROKER_DATABASE_PASSWORD:              "${PACT_BROKER_DB_PASSWORD:?err}"
       PACT_BROKER_DATABASE_CONNECT_MAX_RETRIES:   "5"
       PACT_BROKER_PORT:                           "${PACT_BROKER_PORT:-9292}"
     depends_on:
-      - pact-db
-    networks:
-      - prism-proxy
-      - pact-broker
-    ports:
-      - "${PACT_BROKER_PORT:-9292}:9292"
-  pact-db:
-    container_name: "${PACT_BROKER_DB_HOSTNAME:?err}"
+      - pact-broker-db
+    expose:
+      - "${PACT_BROKER_PORT:-9292}"
+  pact-broker-db:
     image: postgres:13.4-alpine3.14
     restart: always
     healthcheck:
-      test: psql postgres --command "select 1" -U ${PACT_BROKER_DB_USERNAME:?err}
+      test: "psql postgres --command 'select 1' -U ${PACT_BROKER_DB_USERNAME:?err}"
     volumes:
       - pact-postgres:/var/lib/postgresql/data
     environment:
       POSTGRES_DB:       "${PACT_BROKER_DB_NAME:?err}"
       POSTGRES_USER:     "${PACT_BROKER_DB_USERNAME:?err}"
       POSTGRES_PASSWORD: "${PACT_BROKER_DB_PASSWORD:?err}"
-    networks:
-      - pact-broker
-networks:
-  pact-broker:
-  prism-mock:
-  prism-proxy:
-
+  pact-stub:
+    image: pactfoundation/pact-stub-server:v0.4.4
+    command: "--dir /pacts -p 80"
+    expose:
+      - "80"
+    ports:
+      - "4141:80"
+    volumes:
+      - ./tests/pacts:/pacts:ro
 volumes:
   pact-postgres:

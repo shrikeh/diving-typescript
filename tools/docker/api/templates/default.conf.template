@@ -1,18 +1,3 @@
-upstream prism-mock {
-  server ${PRISM_MOCK_HOSTNAME}:${PRISM_MOCK_PORT};
-}
-
-upstream prism-proxy {
-  server ${PRISM_PROXY_HOSTNAME}:${PRISM_PROXY_PORT};
-}
-
-# Map to different backends based on header sent by client
-map $http_prism_select $prism {
-  default "prism-mock";
-  mock "prism-mock";
-  proxy "prism-proxy";
-}
-
 server {
   listen  ${NGINX_HTTPS_PORT} ssl default_server;
   listen  [::]:${NGINX_HTTPS_PORT} ssl default_server;

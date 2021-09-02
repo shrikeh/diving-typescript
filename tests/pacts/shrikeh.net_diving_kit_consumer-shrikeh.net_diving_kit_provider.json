@@ -11,7 +11,7 @@
       "providerState": "i have a list of dogs",
       "request": {
         "method": "GET",
-        "path": "/item/ri-2-100-drysuit",
+        "path": "/kit/ri-2-100-drysuit",
         "headers": {
           "Accept": "application/hal+json"
         }

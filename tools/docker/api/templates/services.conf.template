@@ -1,0 +1,14 @@
+upstream prism-mock {
+  server prism-mock:${PRISM_MOCK_PORT};
+}
+
+upstream prism-proxy {
+  server prism-proxy:${PRISM_PROXY_PORT};
+}
+
+# Map to different backends based on header sent by client
+map $http_prism_select $prism {
+  default "prism-mock";
+  mock "prism-mock";
+  proxy "prism-proxy";
+}
