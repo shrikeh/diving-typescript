@@ -10,7 +10,14 @@ down:
 	docker-compose down --remove-orphans
 
 up: down
-	docker-compose up
+
+upd:
+	docker-compose up -d
 
 prism: up
 
+verify: up
+	docker-compose run pact-cli verify  --provider-base-url="https://virtserver.swaggerhub.com/shrikeh/Diving/1.0.0/" --provider="Shrikeh.net Diving Kit Provider"
+
+logs: upd
+	docker-compose logs -f

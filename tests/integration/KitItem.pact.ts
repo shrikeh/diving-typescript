@@ -12,6 +12,7 @@ import { HalItemFactory } from "~app/Hal/ItemFactory/HalItemFactory";
 import { HalManufacturerFactory } from "~app/Hal/ManufacturerFactory/HalManufacturerFactory";
 import { HalPurchaseInfoFactory } from "~app/Hal/PurchaseInfoFactory/HalPurchaseInfoFactory";
 import { readFileSync } from "fs";
+import { sprintf } from 'sprintf-js';
 
 const __pactsDir = (global as any).__pactsDir;
 
@@ -34,8 +35,7 @@ pactWith(
         "Cross-Origin-Resource-Policy": "same-origin",
         "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
         "Expires": "Wed, 21 Oct 2022 07:28:00 GMT",
-      }
-
+      };
 
       const halItemFactory = new HalItemFactory(
         new HalManufacturerFactory(),
@@ -119,18 +119,16 @@ pactWith(
         };
 
         await provider.addInteraction(interaction);
-
         await expect(repo.fetchBySlug("foo-bar-baz")).rejects.toThrowError();
       });
 
       afterAll(() => {
-      //   const pactBrokerHost = process.env.PACT_BROKER_HOSTNAME as string;
-      //   new Publisher({
-      //     pactFilesOrDirs: [ __pactsDir ],
-      //     pactBroker: "http://localhost",
-      //     providerBaseUrl: (process.env.API_ENDPOINT as string),
-      //     consumerVersion: "1.0.0"
-      //   }).publishPacts();
+        const pactBrokerPort = process.env.PACT_BROKER_HOST_PORT as string;
+        new Publisher({
+          pactFilesOrDirs: [ __pactsDir ],
+          pactBroker: sprintf("http://localhost:%s", pactBrokerPort),
+          consumerVersion: "1.0.0"
+        }).publishPacts();
       });
     });
   }

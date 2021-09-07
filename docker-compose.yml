@@ -41,11 +41,16 @@ services:
       PACT_BROKER_DATABASE_USERNAME:              "${PACT_BROKER_DB_USERNAME:?err}"
       PACT_BROKER_DATABASE_PASSWORD:              "${PACT_BROKER_DB_PASSWORD:?err}"
       PACT_BROKER_DATABASE_CONNECT_MAX_RETRIES:   "5"
-      PACT_BROKER_PORT:                           "${PACT_BROKER_PORT:-9292}"
+      PACT_BROKER_PORT:                           "${PACT_BROKER_PORT?:err}"
+    dns:
+      - 8.8.8.8
+      - 4.4.4.4
     depends_on:
       - pact-broker-db
     expose:
-      - "${PACT_BROKER_PORT:-9292}"
+      - "${PACT_BROKER_PORT:?err}"
+    ports:
+      - "${PACT_BROKER_HOST_PORT:-?err}:${PACT_BROKER_PORT:?err}"
   pact-broker-db:
     image: postgres:13.4-alpine3.14
     restart: always
@@ -66,5 +71,15 @@ services:
       - "4141:80"
     volumes:
       - ./tests/pacts:/pacts:ro
+  pact-cli:
+    image: "pactfoundation/pact-cli:${PACT_CLI_TAG:-0.50.0.1}"
+    environment:
+      PACT_BROKER_BASE_URL: "http://pact-broker:${PACT_BROKER_PORT:?err}/"
+    dns:
+      - 8.8.8.8
+      - 4.4.4.4
+    depends_on:
+      - pact-broker
+
 volumes:
   pact-postgres:
