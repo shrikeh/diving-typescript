@@ -1,17 +1,30 @@
 ---
 version: "3.9"
 services:
+  app:
+    image: "nginx:${NGINX_TAG:-1.21.1-alpine}"
+    ports:
+      - "${NGINX_APP_HOST_PORT:?err}:${NGINX_APP_HTTPS_PORT:-443}"
+    environment:
+      NGINX_HOSTNAME: "${NGINX_APP_HOSTNAME:?err}"
+      NGINX_HTTPS_PORT: "${NGINX_APP_HTTPS_PORT:-443}"
+    volumes:
+      - "${PWD}/dist:/dist:ro"
+      - "${PWD}/tools/docker/app/templates:/etc/nginx/templates:ro"
+      - "${PWD}/tools/tls:/etc/tls:ro"
   api:
     container_name: "${NGINX_API_HOSTNAME:?err}"
-    image: nginx:1.21.1-alpine
+    image: "nginx:${NGINX_TAG:-1.21.1-alpine}"
     ports:
-      - "443:${NGINX_HTTPS_PORT:?err}"
+      - "${NGINX_API_HOST_PORT:?err}:${NGINX_API_HTTPS_PORT:?err}"
     environment:
-      NGINX_API_HOSTNAME: "${NGINX_API_HOSTNAME:?err}"
-      NGINX_HTTPS_PORT: "${NGINX_HTTPS_PORT:-443}"
+      NGINX_HOSTNAME: "${NGINX_API_HOSTNAME:?err}"
+      NGINX_HTTPS_PORT: "${NGINX_API_HTTPS_PORT:-443}"
       PRISM_MOCK_PORT: "${PRISM_MOCK_PORT:?err}"
       PRISM_PROXY_PORT: "${PRISM_PROXY_PORT:?err}"
+      PACT_STUB_PORT: "${PACT_STUB_PORT:?err}"
     depends_on:
+      - pact-stub
       - prism-mock
       - prism-proxy
     volumes:
@@ -34,7 +47,7 @@ services:
     depends_on:
       - pact-stub
   pact-broker:
-    image: pactfoundation/pact-broker:2.81.0.1
+    image: "pactfoundation/pact-broker:${PACT_BROKER_TAG:-2.83.0.0}"
     environment:
       PACT_BROKER_DATABASE_HOST:                  "pact-broker-db"
       PACT_BROKER_DATABASE_NAME:                  "${PACT_BROKER_DB_NAME:?err}"
@@ -52,7 +65,7 @@ services:
     ports:
       - "${PACT_BROKER_HOST_PORT:-?err}:${PACT_BROKER_PORT:?err}"
   pact-broker-db:
-    image: postgres:13.4-alpine3.14
+    image: "postgres:${POSTGRES_TAG:-13.4-alpine3.14}"
     restart: always
     healthcheck:
       test: "psql postgres --command 'select 1' -U ${PACT_BROKER_DB_USERNAME:?err}"
@@ -63,7 +76,7 @@ services:
       POSTGRES_USER:     "${PACT_BROKER_DB_USERNAME:?err}"
       POSTGRES_PASSWORD: "${PACT_BROKER_DB_PASSWORD:?err}"
   pact-stub:
-    image: pactfoundation/pact-stub-server:v0.4.4
+    image: "pactfoundation/pact-stub-server:${PACT_STUB_SERVER_TAG:-v0.4.4}"
     command: "--dir /pacts -p 80"
     expose:
       - "80"
@@ -80,6 +93,5 @@ services:
       - 4.4.4.4
     depends_on:
       - pact-broker
-
 volumes:
   pact-postgres:

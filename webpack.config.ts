@@ -2,13 +2,15 @@ import "dotenv/config";
 import { __distDir } from "./env";
 import { resolve } from "path";
 import { WebpackDevServer } from "webpack-dev-server-types";
-import { Configuration } from "webpack";
+import { Configuration, ProvidePlugin, LoaderOptionsPlugin } from "webpack";
 import { CleanWebpackPlugin } from "clean-webpack-plugin";
-const CspHtmlWebpackPlugin = require("csp-html-webpack-plugin");
 import HtmlWebpackPlugin from "html-webpack-plugin";
 import MiniCssExtractPlugin from "mini-css-extract-plugin";
 import SriPlugin from "webpack-subresource-integrity";
 import { TsconfigPathsPlugin } from "tsconfig-paths-webpack-plugin";
+import { sprintf } from "sprintf-js";
+
+const CspHtmlWebpackPlugin = require("csp-html-webpack-plugin");
 
 export const DevServerConfig: WebpackDevServer.Configuration = {
   compress: true,
@@ -28,12 +30,33 @@ const miniExtractCssOptions = {
 };
 
 const htmlWebpackOptions = {
-  template: resolve(__dirname, "templates/index.ejs"),
+  template: resolve(__dirname, "templates/index.handlebars"),
   title: "Barney's Diving Site",
   inject: false,
   meta: {
-    charset: "utf-8",
-    viewport: "minimum-scale=1, initial-scale=1, width=device-width"
+    charset: {
+      "charset": "utf-8",
+    },
+    contentType: {
+      "http-equiv": "Content-Type",
+      "content": "text/html; charset=UTF-8"
+    },
+    desc: {
+      "name": "description",
+      "content": "A simple site showing off my pimping diving kit and adventures"
+    },
+    viewport: {
+      "name": "viewport",
+      "content": "minimum-scale=1, initial-scale=1, width=device-width"
+    },
+    googleSiteVerification: {
+      "name": "google-site-verification",
+      "content": "bV1vEHUFg8lckfSvBf18zOTssXtYnz1uC6gx4xlbpT0"
+    },
+    rating: {
+      "name": "rating",
+      "content": "general"
+    }
   }
 }
 
@@ -45,11 +68,16 @@ export const WebpackConfig: Configuration = {
   module: {
     rules: [
       {
-        test: /\.hbs$/,
+        test: /\.handlebars$/,
         exclude: /node_modules/,
         use: [
           {
-            loader: "handlebars-loader"
+            loader: "handlebars-loader",
+            options: {
+              partialDirs: [
+                resolve(__dirname, 'templates', 'partials')
+              ]
+            }
           },
         ]
       },
@@ -94,7 +122,8 @@ export const WebpackConfig: Configuration = {
     new CspHtmlWebpackPlugin({
       "script-src": "",
       "style-src": ""
-    })
+    }),
+    new LoaderOptionsPlugin()
   ]
 };
 

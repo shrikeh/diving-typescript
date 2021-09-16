@@ -25,6 +25,15 @@ paths:
         '200':
           description: List all kit
           headers:
+            'Access-Control-Allow-Origin':
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/HeaderAccessControlAllowOrigin'
+            'Access-Control-Allow-Methods':
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/HeaderAccessControlAllowHeaders'
+              example: "HEAD, GET"
             'Age':
               schema:
                 allOf:
@@ -116,6 +125,15 @@ paths:
         '200':
           description: A Kit Item
           headers:
+            'Access-Control-Allow-Origin':
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/HeaderAccessControlAllowOrigin'
+            'Access-Control-Allow-Methods':
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/HeaderAccessControlAllowHeaders'
+              example: "HEAD, GET"
             'Age':
               schema:
                 allOf:
@@ -161,6 +179,7 @@ paths:
                 allOf:
                   - $ref: '#/components/schemas/HeaderStrictTransportSecurity'
               example: 'max-age=63072000; includeSubDomains; preload'
+
           content:
             'application/hal+json':
               schema:
@@ -189,11 +208,24 @@ components:
             $ref: '#/components/schemas/Error'
     Protobuf:
       description: A Protobuf-encoded version of the content
+      headers:
+        'Protobuf-Schema-Uri':
+          schema:
+            allOf:
+              - $ref: '#/components/schemas/HeaderProtobufSchemaUri'
       content:
         'application/vnd.google.protobuf':
           schema:
             $ref: '#/components/schemas/ProtobufMessage'
   schemas:
+    HeaderAccessControlAllowOrigin:
+      type: string
+      format: uri
+      example: "https://diving.shrikeh.net"
+    HeaderAccessControlAllowHeaders:
+      type: string
+      pattern: "(HEAD|GET|PUT|POST|OPTIONS)+,?"
+      example: "HEAD, GET, POST"
     HeaderAge:
       type: integer
       format: int32
@@ -219,7 +251,11 @@ components:
     HeaderCanonicalLink:
       description: A canonical link to the resource (where a resource may be accessed by multiple URIs).
       type: string
-      example: <https://virtserver.swaggerhub.com/shrikeh/Diving2/1.0.0/kit/some-item-slug>; rel="canonical"
+      example: '<https://virtserver.swaggerhub.com/shrikeh/Diving2/1.0.0/kit/some-item-slug>; rel="canonical"'
+    HeaderProtobufSchemaUri:
+      type: string
+      format: uri
+      example: 'https://assets.shrikeh.net/diving/kit-item.proto.json'
     HeaderContentSecurityPolicy:
       type: string
       example: "default-src 'self'; report-uri https://report.shrikeh.net/csp"
@@ -387,4 +423,3 @@ components:
       type: string
       format: base64
       example: 'Zm9vYmFyYmF6Ym9v'
-

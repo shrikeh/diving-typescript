@@ -6,9 +6,14 @@ upstream prism-proxy {
   server prism-proxy:${PRISM_PROXY_PORT};
 }
 
+upstream pact-stub {
+  server pact-stub:${PACT_STUB_PORT};
+}
+
 # Map to different backends based on header sent by client
 map $http_prism_select $prism {
   default "prism-mock";
   mock "prism-mock";
   proxy "prism-proxy";
+  stub "pact-stub";
 }

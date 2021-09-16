@@ -1,0 +1,49 @@
+server {
+  listen  ${NGINX_HTTPS_PORT} ssl default_server;
+  listen  [::]:${NGINX_HTTPS_PORT} ssl default_server;
+  server_name localhost ${NGINX_HOSTNAME} _;
+
+  root /dev/null;
+
+  ssl_certificate /etc/tls/certs/nginx-selfsigned.crt;
+  ssl_certificate_key /etc/tls/private/nginx-selfsigned.key;
+
+  ssl_protocols TLSv1.3 TLSv1.2;
+  ssl_prefer_server_ciphers on;
+  ssl_ciphers "EECDH+AESGCM:EDH+AESGCM:AES256+EECDH:AES256+EDH";
+  ssl_ecdh_curve secp384r1;
+  ssl_session_cache shared:SSL:10m;
+  ssl_session_tickets off;
+  ssl_stapling on;
+  ssl_stapling_verify on;
+  resolver 8.8.8.8 8.8.4.4 valid=300s;
+  resolver_timeout 5s;
+
+  # Disable preloading HSTS for now.  You can use the commented out header line that includes
+  # the "preload" directive if you understand the implications.
+  #add_header Strict-Transport-Security "max-age=63072000; includeSubdomains; preload";
+  add_header Strict-Transport-Security "max-age=63072000; includeSubdomains";
+  add_header X-Frame-Options DENY;
+  add_header X-Content-Type-Options nosniff;
+
+  ssl_dhparam /etc/tls/certs/dhparam.pem;
+
+  #access_log  /var/log/nginx/host.access.log  main;
+
+  rewrite ^/(.*)/$ /$1 break;
+
+  gzip on;
+  gzip_types application/javascript image/* text/css;
+  gunzip on;
+
+  location / {
+    root /dist;
+    index index.html;
+    location ~ \.(css|html|js)$ {
+      expires 30d;
+
+      sendfile on;
+      tcp_nopush on;
+    }
+  }
+}

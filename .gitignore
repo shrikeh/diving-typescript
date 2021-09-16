@@ -1,8 +1,9 @@
 /build
+/dist
 /logs
 /node_modules
 /yarn-error.log
-
+/.env
 
 ### IDE settings
 /.idea

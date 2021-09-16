@@ -1,0 +1,168 @@
+{
+  "nested": {
+    "diving": {
+      "nested": {
+        "KitItem": {
+          "oneofs": {
+            "__embedded": {
+              "oneof": [
+                "_embedded"
+              ]
+            }
+          },
+          "fields": {
+            "_links": {
+              "type": "ItemHalLinks",
+              "id": 1
+            },
+            "id": {
+              "type": "string",
+              "id": 2
+            },
+            "name": {
+              "type": "string",
+              "id": 3
+            },
+            "purchaseInfo": {
+              "type": "PurchaseInfo",
+              "id": 4
+            },
+            "_embedded": {
+              "type": "ItemEmbeddedLinks",
+              "id": 5,
+              "options": {
+                "proto3_optional": true
+              }
+            }
+          }
+        },
+        "ItemHalLinks": {
+          "oneofs": {
+            "_itemReferral": {
+              "oneof": [
+                "itemReferral"
+              ]
+            }
+          },
+          "fields": {
+            "self": {
+              "type": "HalHrefLink",
+              "id": 1
+            },
+            "kitImg": {
+              "type": "HalHrefLink",
+              "id": 2
+            },
+            "kitThumb": {
+              "type": "HalHrefLink",
+              "id": 3
+            },
+            "itemReferral": {
+              "type": "HalHrefLink",
+              "id": 4,
+              "options": {
+                "proto3_optional": true
+              }
+            }
+          }
+        },
+        "ItemEmbeddedLinks": {
+          "fields": {
+            "kitManufacturer": {
+              "type": "Manufacturer",
+              "id": 1
+            }
+          }
+        },
+        "Manufacturer": {
+          "oneofs": {
+            "_phone": {
+              "oneof": [
+                "phone"
+              ]
+            }
+          },
+          "fields": {
+            "_links": {
+              "type": "ManufacturerHalLinks",
+              "id": 1
+            },
+            "name": {
+              "type": "string",
+              "id": 2
+            },
+            "homePage": {
+              "type": "string",
+              "id": 3
+            },
+            "phone": {
+              "type": "string",
+              "id": 4,
+              "options": {
+                "proto3_optional": true
+              }
+            }
+          }
+        },
+        "ManufacturerHalLinks": {
+          "fields": {
+            "self": {
+              "type": "HalHrefLink",
+              "id": 1
+            },
+            "logoImg": {
+              "type": "HalHrefLink",
+              "id": 2
+            }
+          }
+        },
+        "HalHrefLink": {
+          "oneofs": {
+            "_title": {
+              "oneof": [
+                "title"
+              ]
+            }
+          },
+          "fields": {
+            "href": {
+              "type": "string",
+              "id": 1
+            },
+            "title": {
+              "type": "string",
+              "id": 2,
+              "options": {
+                "proto3_optional": true
+              }
+            }
+          }
+        },
+        "PurchaseInfo": {
+          "fields": {
+            "purchased": {
+              "type": "string",
+              "id": 2
+            },
+            "price": {
+              "type": "Price",
+              "id": 3
+            }
+          }
+        },
+        "Price": {
+          "fields": {
+            "amount": {
+              "type": "int32",
+              "id": 1
+            },
+            "currency": {
+              "type": "string",
+              "id": 2
+            }
+          }
+        }
+      }
+    }
+  }
+}

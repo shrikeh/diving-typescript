@@ -1,18 +1,19 @@
 /**
  * @jest-environment node
  */
+import { emptyDir, readFileSync } from "fs-extra";
+import { resolve } from "path";
+import { sprintf } from 'sprintf-js';
+import axios from "axios";
 import { pactWith } from "jest-pact";
 import { InteractionObject, Publisher } from "@pact-foundation/pact";
-
 import { HTTPMethod } from "@pact-foundation/pact/src/common/request";
-import { resolve } from "path";
-import axios from "axios";
+
 import { AxiosKitRepository } from "~app/Repository/Kit";
 import { HalItemFactory } from "~app/Hal/ItemFactory/HalItemFactory";
 import { HalManufacturerFactory } from "~app/Hal/ManufacturerFactory/HalManufacturerFactory";
 import { HalPurchaseInfoFactory } from "~app/Hal/PurchaseInfoFactory/HalPurchaseInfoFactory";
-import { readFileSync } from "fs";
-import { sprintf } from 'sprintf-js';
+import { like, term } from "@pact-foundation/pact/src/dsl/matchers";
 
 const __pactsDir = (global as any).__pactsDir;
 
@@ -22,19 +23,20 @@ pactWith(
     provider: "Shrikeh.net Diving Kit Provider",
     log: resolve((global as any).__logsDir, "pact/pact.log"),
     dir: __pactsDir,
-    logLevel: "debug"
+    logLevel: "debug",
+    pactfileWriteMode: "merge"
   },
   provider => {
     describe("KitItem test", () => {
-      const commonHeaders = {
-        "Age": "24",
-        "Content-Type": "application/hal+json",
-        "Cache-Control": "public, max-age=604800, immutable",
-        "Last-Modified": "Wed, 21 July 2021 07:28:00 GMT",
-        "Content-Security-Policy": "default-src 'self'; report-uri https://report.shrikeh.net/csp",
-        "Cross-Origin-Resource-Policy": "same-origin",
-        "Strict-Transport-Security": "max-age=63072000; includeSubDomains; preload",
-        "Expires": "Wed, 21 Oct 2022 07:28:00 GMT",
+      const commonResponseHeaders = {
+        "content-type": "application/hal+json"
+      };
+
+      const commonRequestHeaders = {
+        Accept: term({
+          matcher: 'application/(hal\\+)?json',
+          generate: "application/hal+json"
+        })
       };
 
       const halItemFactory = new HalItemFactory(
@@ -46,9 +48,7 @@ pactWith(
         const kitItemExpectedRequest = {
           method: HTTPMethod.GET,
           path: "/kit/ri-2-100-drysuit",
-          headers: {
-            Accept: "application/hal+json"
-          }
+          headers: commonRequestHeaders
         };
 
         const repo = new AxiosKitRepository(axios.create({
@@ -60,14 +60,8 @@ pactWith(
 
         const kitItemResponse = {
           status: 200,
-          headers: {
-            ...commonHeaders,
-            "Etag": "169-ZvbJQlMiJ0Z/SvJhPuvYWPLgCiU",
-            "Link": '<https://virtserver.swaggerhub.com/shrikeh/Diving2/1.0.0/kit/some-item-slug>; rel="canonical"',
-          },
-          body: JSON.parse(
-            readFileSync(resolve((global as any).__fixturesDir, "KitItem.json")).toString()
-          )
+          headers: commonResponseHeaders,
+          body: like(JSON.parse(readFileSync(resolve((global as any).__fixturesDir, "KitItem.json")).toString()))
         };
 
         const interaction: InteractionObject = {
@@ -87,24 +81,19 @@ pactWith(
         const repo = new AxiosKitRepository(axios.create({
           baseURL: provider.mockService.baseUrl,
           headers: {
-            Accept: "application/hal+json",
+            Accept: "application/hal+json"
           }
         }), halItemFactory);
 
         const kitItemExpectedRequest = {
           method: HTTPMethod.GET,
           path: "/kit/foo-bar-baz",
-          headers: {
-            Accept: "application/hal+json"
-          }
+          headers: commonRequestHeaders
         };
 
         const kitItemResponse = {
           status: 404,
-          headers: {
-            ...commonHeaders,
-            "Etag": "169-ZvbJQlMiJ0Z/SvJhPuvYWPLgCiU"
-          },
+          headers: commonResponseHeaders,
           body: {
             code: 404,
             message: "Kit item not found"
@@ -120,6 +109,10 @@ pactWith(
 
         await provider.addInteraction(interaction);
         await expect(repo.fetchBySlug("foo-bar-baz")).rejects.toThrowError();
+      });
+
+      beforeAll(async () => {
+        await emptyDir(__pactsDir);
       });
 
       afterAll(() => {
