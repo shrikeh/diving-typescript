@@ -1,17 +1,34 @@
 ---
 version: "3.9"
+x-dns: &dns
+  dns:
+    - "8.8.8.8"
+    - "4.4.4.4"
 services:
-  app:
+  frontend:
     image: "nginx:${NGINX_TAG:-1.21.1-alpine}"
     ports:
-      - "${NGINX_APP_HOST_PORT:?err}:${NGINX_APP_HTTPS_PORT:-443}"
+      - "${NGINX_APP_HOST_HTTPS_PORT:?err}:${NGINX_APP_HTTPS_PORT:-443}"
+      - "${NGINX_APP_HOST_HTTP_PORT:?err}:${NGINX_APP_HTTP_PORT:-80}"
     environment:
       NGINX_HOSTNAME: "${NGINX_APP_HOSTNAME:?err}"
+      NGINX_HTTP_PORT: "${NGINX_APP_HTTP_PORT:-80}"
       NGINX_HTTPS_PORT: "${NGINX_APP_HTTPS_PORT:-443}"
     volumes:
       - "${PWD}/dist:/dist:ro"
       - "${PWD}/tools/docker/app/templates:/etc/nginx/templates:ro"
       - "${PWD}/tools/tls:/etc/tls:ro"
+  app:
+    image: "node:${NODE_TAG:-current-alpine3.14}"
+    working_dir: /diving
+    user: "node"
+    environment:
+      NPM_CONFIG_LOGLEVEL: "${NODE_LOG_LEVEL:-info}"
+      YARN_CACHE_FOLDER: "/home/mode/yarn"
+    entrypoint: "yarn build"
+    volumes:
+      - ./:/diving
+      - "yarn-cache:/home/mode/yarn"
   api:
     container_name: "${NGINX_API_HOSTNAME:?err}"
     image: "nginx:${NGINX_TAG:-1.21.1-alpine}"
@@ -39,7 +56,7 @@ services:
       - "${PRISM_MOCK_PORT:?err}"
   prism-proxy:
     command: "proxy -p ${PRISM_PROXY_PORT:?err} -h 0.0.0.0 /tmp/${API_FILE:?err} http://pact-stub/"
-    image: stoplight/prism:4
+    image: "stoplight/prism:${STOPLIGHT_PRISM_TAG:-4.3.4}"
     volumes:
       - "${PWD}/api.yml:/tmp/${API_FILE:?err}:ro"
     expose:
@@ -53,11 +70,9 @@ services:
       PACT_BROKER_DATABASE_NAME:                  "${PACT_BROKER_DB_NAME:?err}"
       PACT_BROKER_DATABASE_USERNAME:              "${PACT_BROKER_DB_USERNAME:?err}"
       PACT_BROKER_DATABASE_PASSWORD:              "${PACT_BROKER_DB_PASSWORD:?err}"
-      PACT_BROKER_DATABASE_CONNECT_MAX_RETRIES:   "5"
+      PACT_BROKER_DATABASE_CONNECT_MAX_RETRIES:   "${PACT_BROKER_DB_MAX_RETRIES:-5}"
       PACT_BROKER_PORT:                           "${PACT_BROKER_PORT?:err}"
-    dns:
-      - 8.8.8.8
-      - 4.4.4.4
+    <<: *dns
     depends_on:
       - pact-broker-db
     expose:
@@ -70,7 +85,7 @@ services:
     healthcheck:
       test: "psql postgres --command 'select 1' -U ${PACT_BROKER_DB_USERNAME:?err}"
     volumes:
-      - pact-postgres:/var/lib/postgresql/data
+      - "pact-postgres:/var/lib/postgresql/data"
     environment:
       POSTGRES_DB:       "${PACT_BROKER_DB_NAME:?err}"
       POSTGRES_USER:     "${PACT_BROKER_DB_USERNAME:?err}"
@@ -83,15 +98,14 @@ services:
     ports:
       - "4141:80"
     volumes:
-      - ./tests/pacts:/pacts:ro
+      - "./tests/pacts:/pacts:ro"
   pact-cli:
     image: "pactfoundation/pact-cli:${PACT_CLI_TAG:-0.50.0.1}"
     environment:
       PACT_BROKER_BASE_URL: "http://pact-broker:${PACT_BROKER_PORT:?err}/"
-    dns:
-      - 8.8.8.8
-      - 4.4.4.4
+    <<: *dns
     depends_on:
       - pact-broker
 volumes:
   pact-postgres:
+  yarn-cache:

@@ -1,7 +1,6 @@
 {
   "dependencies": {
     "@material-ui/core": "^4.12.3",
-    "@types/dotenv": "^8.2.0",
     "@types/fs-extra": "^9.0.12",
     "@types/halfred": "^2.0.1",
     "@types/react": "^17.0.6",
@@ -17,7 +16,9 @@
     "decimal.js": "^10.2.1",
     "dotenv": "^10.0.0",
     "halfred": "^2.0.0",
+    "handlebars": "^4.7.7",
     "handlebars-loader": "^1.7.1",
+    "prop-types": "^15.7.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-ga": "^3.3.0",
@@ -101,7 +102,8 @@
   "scripts": {
     "start": "webpack serve --open",
     "watch": "webpack --watch",
-    "build": "webpack",
+    "prebuild": "yarn install --pure-lockfile",
+    "build": "yarn webpack",
     "test:spec": "jest --testPathPattern='./src/'",
     "test:int": "jest --testPathPattern='./tests/integration/'",
     "lint": "eslint src"
