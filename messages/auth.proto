@@ -1,0 +1,6 @@
+package auth;
+syntax = "proto3";
+
+message LoginCredentials {
+  string credentials = 1;
+}

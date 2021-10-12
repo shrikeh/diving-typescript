@@ -1,3 +1,4 @@
+import { describe, test } from "@jest/globals";
 import React from 'react';
 import { render } from '@testing-library/react';
 import { Equipment } from './Equipment';

@@ -87,10 +87,10 @@ export const WebpackConfig: Configuration = {
     new CleanWebpackPlugin(),
     new HtmlWebpackPlugin(htmlWebpackOptions),
     new MiniCssExtractPlugin(miniExtractCssOptions),
-    new SriPlugin({
-      enabled: true,
-      hashFuncNames: [ "sha384" ]
-    }),
+    // new SriPlugin({
+    //   enabled: true,
+    //   hashFuncNames: [ "sha384" ]
+    // }),
     new CspHtmlWebpackPlugin({
       "script-src": "",
       "style-src": ""

@@ -1,6 +1,6 @@
 {
   "include": [
-    "src"
+    "src/**/*"
   ],
   "exclude": [
     "node_modules"
@@ -35,6 +35,7 @@
       "~app/*": [ "src/app/*" ],
       "~diving/*": [ "src/diving/*" ],
       "~components/*": [ "src/components/*" ],
+      "~schema/*": [ "src/schema/*" ],
       "~gulp/*": [ "tools/gulp/*" ],
       "~/*": [ "./*" ],
       "*": [ "*", "node_modules/*", "types/*"  ]

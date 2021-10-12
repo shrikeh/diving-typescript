@@ -1,6 +1,6 @@
 import { Decimal } from 'decimal.js';
 import NumberFormat = Intl.NumberFormat;
-import AmountNotPositive from '~diving/Price/AmountNotPositive';
+import AmountNotPositive from '~diving/Price/Error/AmountNotPositive';
 
 export enum CurrencyIsoCode {
   GBP = 'GBP',

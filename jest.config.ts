@@ -11,7 +11,7 @@ export default async (): Promise<Config.InitialOptions> => {
       ..._env
     },
     cacheDirectory: "<rootDir>/build/.cache",
-    testEnvironment: "jsdom",
+    testEnvironment: "<rootDir>/tests/TestEnvironment",
     verbose: true,
     preset: "ts-jest",
     roots: [
